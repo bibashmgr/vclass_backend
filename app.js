@@ -4,8 +4,12 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const passport = require('passport');
+const session = require('express-session');
 
-const indexRoutes = require('./routes/testRoutes.js');
+// routes
+const homeRoutes = require('./routes/home.route.js');
+const authRoutes = require('./routes/auth.route.js');
 
 const app = express();
 dotenv.config();
@@ -14,17 +18,31 @@ dotenv.config();
 const PORT_NUMBER = process.env.PORT_NUMBER || 9999;
 const CLIENT_BASE_URL = process.env.CLIENT_BASE_URL;
 const MONGODB_URL = process.env.MONGODB_URL;
+const SESSION_SECRET = process.env.SESSION_SECRET;
 
 app.use(
   cors({
     origin: CLIENT_BASE_URL,
+    methods: 'GET,POST,PUT,DELETE',
+    credentials: true,
   })
 );
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json({ extended: true }));
 
-// routes
-app.use('/', indexRoutes);
+app.use(
+  session({
+    secret: SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+app.use(passport.initialize());
+app.use(passport.session());
+require('./config/passport.js')(passport);
+
+app.use('/', homeRoutes);
+app.use('/auth', authRoutes);
 
 const httpServer = http.createServer(app);
 
