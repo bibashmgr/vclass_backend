@@ -1,7 +1,7 @@
 const express = require('express');
 
 // controllers
-const { welcomeScreen } = require('../controllers/testControllers.js');
+const { welcomeScreen } = require('../controllers/home.controller.js');
 
 const router = express.Router();
 
