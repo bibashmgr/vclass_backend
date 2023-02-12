@@ -1,3 +1,6 @@
+// config
+const logger = require('../utils/logger.js');
+
 const welcomeScreen = (req, res) => {
   try {
     res.status(200).json({
@@ -5,14 +8,20 @@ const welcomeScreen = (req, res) => {
       success: true,
       message: 'Hello',
     });
-    console.log('method: GET, endpoint: /');
+    logger.info('Hello');
   } catch (error) {
-    res.status(200).json({
+    res.status(400).json({
       data: null,
       success: false,
       message: error.message,
     });
+    logger.error(error.message);
   }
 };
 
-module.exports = { welcomeScreen };
+const errorScreen = (req, res, next) => {
+  next();
+  logger.error('This is Error');
+};
+
+module.exports = { welcomeScreen, errorScreen };

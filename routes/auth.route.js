@@ -1,8 +1,8 @@
 const express = require('express');
 const passport = require('passport');
 
-// environment variables
-CLIENT_BASE_URL = process.env.CLIENT_BASE_URL;
+// config
+const config = require('../config/config.js');
 
 // controllers
 const {
@@ -19,10 +19,10 @@ router.get(
 router.get(
   '/google/callback',
   passport.authenticate('google', {
-    failureRedirect: `${CLIENT_BASE_URL}/auth/login`,
+    failureRedirect: `${config.clientBaseUrl}/auth/login`,
   }),
   (req, res) => {
-    res.redirect(`${CLIENT_BASE_URL}/auth/login`);
+    res.redirect(`${config.clientBaseUrl}/auth/login`);
   }
 );
 router.get('/login/success', getUserInfo);
