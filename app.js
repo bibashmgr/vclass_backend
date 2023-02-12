@@ -1,7 +1,6 @@
 const express = require('express');
 const http = require('http');
 const mongoose = require('mongoose');
-const dotenv = require('dotenv');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const passport = require('passport');
@@ -11,18 +10,20 @@ const session = require('express-session');
 const homeRoutes = require('./routes/home.route.js');
 const authRoutes = require('./routes/auth.route.js');
 
-const app = express();
-dotenv.config();
+// config
+const config = require('./config/config.js');
 
-// environment_variables
-const PORT_NUMBER = process.env.PORT_NUMBER || 9999;
-const CLIENT_BASE_URL = process.env.CLIENT_BASE_URL;
-const MONGODB_URL = process.env.MONGODB_URL;
-const SESSION_SECRET = process.env.SESSION_SECRET;
+// utils
+const logger = require('./utils/logger.js');
+
+// middlewares
+const morganMiddleware = require('./middlewares/morgan.middleware.js');
+
+const app = express();
 
 app.use(
   cors({
-    origin: CLIENT_BASE_URL,
+    origin: config.clientBaseUrl,
     methods: 'GET,POST,PUT,DELETE',
     credentials: true,
   })
@@ -32,14 +33,17 @@ app.use(bodyParser.json({ extended: true }));
 
 app.use(
   session({
-    secret: SESSION_SECRET,
+    secret: config.sessionSecret,
     resave: false,
     saveUninitialized: false,
   })
 );
+
 app.use(passport.initialize());
 app.use(passport.session());
-require('./config/passport.js')(passport);
+require('./utils/passport.js')(passport);
+
+app.use(morganMiddleware);
 
 app.use('/', homeRoutes);
 app.use('/auth', authRoutes);
@@ -48,21 +52,21 @@ const httpServer = http.createServer(app);
 
 mongoose.set('strictQuery', true);
 mongoose.connect(
-  MONGODB_URL,
+  config.mongodbUrl,
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   },
   (error) => {
     if (error) {
-      console.log(error);
+      logger.error(error.message);
     } else {
-      console.log('Database connected');
-      httpServer.listen(PORT_NUMBER, (err) => {
+      logger.info('Database Connected');
+      httpServer.listen(config.portNumber, (err) => {
         if (err) {
-          console.log(err);
+          logger.error(err.message);
         } else {
-          console.log(`Server running on http://localhost:${PORT_NUMBER}`);
+          logger.info(`Server running on ${config.serverBaseUrl}`);
         }
       });
     }
