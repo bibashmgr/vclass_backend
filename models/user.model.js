@@ -4,19 +4,37 @@ const userSchema = new mongoose.Schema(
   {
     googleId: {
       type: String,
-      require: true,
+      required: true,
     },
     name: {
       type: String,
-      require: true,
+      required: true,
     },
     email: {
       type: String,
-      require: true,
+      unique: true,
+      required: true,
     },
     avatar: {
       type: String,
       default: '',
+    },
+    role: {
+      type: String,
+      enum: ['user', 'student', 'teacher', 'admin'],
+      default: 'user',
+    },
+    college: {
+      type: String,
+      default: 'gces',
+    },
+    faculty: {
+      type: String,
+      default: '',
+    },
+    batch: {
+      type: Number,
+      default: null,
     },
   },
   {

@@ -30,15 +30,25 @@ const getUserInfo = async (req, res) => {
 
 const logoutUser = async (req, res) => {
   try {
-    res.logout;
-    res.status(200).json({
-      data: null,
-      success: true,
-      message: 'Logout user',
+    req.logout((err) => {
+      if (err) {
+        res.status(500).json({
+          data: null,
+          success: false,
+          message: err.message,
+        });
+        logger.error(err.message);
+      } else {
+        res.status(200).json({
+          data: null,
+          success: true,
+          message: 'Logout user',
+        });
+        logger.info('Logout user');
+      }
     });
-    logger.info('Logout user');
   } catch (error) {
-    res.status(200).json({
+    res.status(500).json({
       data: null,
       success: false,
       message: error.message,

@@ -22,7 +22,7 @@ router.get(
     failureRedirect: `${config.clientBaseUrl}/auth/login`,
   }),
   (req, res) => {
-    res.redirect(`${config.clientBaseUrl}/auth/login`);
+    res.redirect(`${config.clientBaseUrl}/`);
   }
 );
 router.get('/login/success', getUserInfo);
