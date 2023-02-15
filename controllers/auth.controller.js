@@ -1,4 +1,4 @@
-// config
+// utils
 const logger = require('../utils/logger.js');
 
 const getUserInfo = async (req, res) => {
@@ -19,7 +19,7 @@ const getUserInfo = async (req, res) => {
       logger.warn('Fail to fetch userInfo');
     }
   } catch (error) {
-    res.status(200).json({
+    res.status(500).json({
       data: null,
       success: false,
       message: error.message,

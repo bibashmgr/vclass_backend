@@ -9,6 +9,8 @@ const session = require('express-session');
 // routes
 const homeRoutes = require('./routes/home.route.js');
 const authRoutes = require('./routes/auth.route.js');
+const subjectRoutes = require('./routes/subject.route.js');
+const facultyRoutes = require('./routes/faculty.route.js');
 
 // config
 const config = require('./config/config.js');
@@ -47,6 +49,8 @@ app.use(morganMiddleware);
 
 app.use('/', homeRoutes);
 app.use('/auth', authRoutes);
+app.use('/subject', subjectRoutes);
+app.use('/faculty', facultyRoutes);
 
 const httpServer = http.createServer(app);
 

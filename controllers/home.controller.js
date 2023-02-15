@@ -10,7 +10,7 @@ const welcomeScreen = (req, res) => {
     });
     logger.info('Hello');
   } catch (error) {
-    res.status(400).json({
+    res.status(500).json({
       data: null,
       success: false,
       message: error.message,
