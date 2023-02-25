@@ -11,6 +11,7 @@ const homeRoutes = require('./routes/home.route.js');
 const authRoutes = require('./routes/auth.route.js');
 const subjectRoutes = require('./routes/subject.route.js');
 const facultyRoutes = require('./routes/faculty.route.js');
+const batchRoutes = require('./routes/batch.route.js');
 
 // config
 const config = require('./config/config.js');
@@ -31,7 +32,31 @@ app.use(
   })
 );
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json({ extended: true }));
+app.use(
+  bodyParser.json({
+    extended: true,
+    verify: (req, res, buf, encoding) => {
+      if (!req.is('application/json')) {
+        return res.status(400).json({
+          data: null,
+          success: false,
+          message: 'Invalid Request',
+        });
+      }
+
+      try {
+        JSON.parse(buf.toString(encoding));
+      } catch (err) {
+        logger.error('Invalid Request');
+        return res.status(400).json({
+          data: null,
+          success: false,
+          message: 'Invalid Request',
+        });
+      }
+    },
+  })
+);
 
 app.use(
   session({
@@ -51,6 +76,7 @@ app.use('/', homeRoutes);
 app.use('/auth', authRoutes);
 app.use('/subject', subjectRoutes);
 app.use('/faculty', facultyRoutes);
+app.use('/batch', batchRoutes);
 
 const httpServer = http.createServer(app);
 
