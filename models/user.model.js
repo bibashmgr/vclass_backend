@@ -26,15 +26,11 @@ const userSchema = new mongoose.Schema(
     },
     college: {
       type: String,
-      default: 'gces',
-    },
-    faculty: {
-      type: String,
       default: '',
     },
-    batch: {
-      type: Number,
-      default: null,
+    batchId: {
+      type: String,
+      default: '',
     },
   },
   {
