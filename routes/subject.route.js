@@ -28,12 +28,7 @@ router.get('/', getSubjects);
 
 router.get(
   '/:id',
-  check('id').custom((value) => {
-    if (!mongoose.isObjectIdOrHexString(value)) {
-      return Promise.reject('Invalid subjectId');
-    }
-    return true;
-  }),
+  check('id').isMongoId().withMessage('Invalid subjectId'),
   bodyValidation,
   getSubject
 );
@@ -42,24 +37,14 @@ router.put(
   '/:id',
   check('name').not().isEmpty().withMessage('Name is empty').trim(),
   check('codeName').not().isEmpty().withMessage('CodeName is empty').trim(),
-  check('id').custom((value) => {
-    if (!mongoose.isObjectIdOrHexString(value)) {
-      return Promise.reject('Invalid subjectId');
-    }
-    return true;
-  }),
+  check('id').isMongoId().withMessage('Invalid subjectId'),
   bodyValidation,
   updateSubject
 );
 
 router.delete(
   '/:id',
-  check('id').custom((value) => {
-    if (!mongoose.isObjectIdOrHexString(value)) {
-      return Promise.reject('Invalid subjectId');
-    }
-    return true;
-  }),
+  check('id').isMongoId().withMessage('Invalid subjectId'),
   bodyValidation,
   deleteSubject
 );

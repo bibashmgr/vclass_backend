@@ -44,24 +44,13 @@ router.get('/', getBatches);
 
 router.get(
   '/:id',
-  check('id').custom((value) => {
-    if (!mongoose.isObjectIdOrHexString(value)) {
-      return Promise.reject('Invalid batchId');
-    }
-    return true;
-  }),
+  check('id').isMongoId().withMessage('Invalid batchId'),
   bodyValidation,
   getBatch
 );
 
 router.put(
   '/:id',
-  check('id').custom((value) => {
-    if (!mongoose.isObjectIdOrHexString(value)) {
-      return Promise.reject('Invalid batchId');
-    }
-    return true;
-  }),
   check('year')
     .trim()
     .isNumeric()
@@ -80,18 +69,14 @@ router.put(
     .isNumeric()
     .withMessage('Semester is required')
     .toInt(),
+  check('id').isMongoId().withMessage('Invalid batchId'),
   bodyValidation,
   updateBatch
 );
 
 router.delete(
   '/:id',
-  check('id').custom((value) => {
-    if (!mongoose.isObjectIdOrHexString(value)) {
-      return Promise.reject('Invalid batchId');
-    }
-    return true;
-  }),
+  check('id').isMongoId().withMessage('Invalid batchId'),
   bodyValidation,
   deleteBatch
 );

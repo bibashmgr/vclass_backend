@@ -36,12 +36,7 @@ router.get('/', getFaculties);
 
 router.get(
   '/:id',
-  check('id').custom((value) => {
-    if (!mongoose.isObjectIdOrHexString(value)) {
-      return Promise.reject('Invalid facultyId');
-    }
-    return true;
-  }),
+  check('id').isMongoId().withMessage('Invalid facultyId'),
   bodyValidation,
   getFaculty
 );
@@ -58,24 +53,14 @@ router.put(
       }
       return true;
     }),
-  check('id').custom((value) => {
-    if (!mongoose.isObjectIdOrHexString(value)) {
-      return Promise.reject('Invalid facultyId');
-    }
-    return true;
-  }),
+  check('id').isMongoId().withMessage('Invalid facultyId'),
   bodyValidation,
   updateFaculty
 );
 
 router.delete(
   '/:id',
-  check('id').custom((value) => {
-    if (!mongoose.isObjectIdOrHexString(value)) {
-      return Promise.reject('Invalid facultyId');
-    }
-    return true;
-  }),
+  check('id').isMongoId().withMessage('Invalid facultyId'),
   bodyValidation,
   deleteFaculty
 );
