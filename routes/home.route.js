@@ -8,7 +8,9 @@ const {
 
 const router = express.Router();
 
-router.get('/', welcomeScreen);
-router.get('/error', errorScreen);
+// middlewares
+const { userValidation } = require('../middlewares/validation.middleware.js');
+
+router.get('/', userValidation, welcomeScreen);
 
 module.exports = router;
