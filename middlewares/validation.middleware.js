@@ -38,7 +38,7 @@ const userValidation = (req, res, next) => {
           res.status(400).json({
             data: null,
             success: false,
-            message: 'TOKEN EXPIRED',
+            message: 'ACCESS DENIED',
           });
         } else {
           req.userId = decoded.id;
@@ -56,7 +56,7 @@ const userValidation = (req, res, next) => {
     res.status(401).json({
       data: null,
       success: false,
-      message: 'TOKEN NOT FOUND',
+      message: 'ACCESS DENIED',
     });
   }
 };
