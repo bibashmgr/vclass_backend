@@ -1,10 +1,16 @@
 const express = require('express');
 
 // controllers
-const { welcomeScreen } = require('../controllers/home.controller.js');
+const {
+  welcomeScreen,
+  errorScreen,
+} = require('../controllers/home.controller.js');
 
 const router = express.Router();
 
-router.get('/', welcomeScreen);
+// middlewares
+const { userValidation } = require('../middlewares/validation.middleware.js');
+
+router.get('/', userValidation, welcomeScreen);
 
 module.exports = router;

@@ -1,50 +1,102 @@
 const express = require('express');
 const http = require('http');
 const mongoose = require('mongoose');
-const dotenv = require('dotenv');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const passport = require('passport');
+const session = require('express-session');
 
-const indexRoutes = require('./routes/testRoutes.js');
+// routes
+const homeRoutes = require('./routes/home.route.js');
+const authRoutes = require('./routes/auth.route.js');
+const subjectRoutes = require('./routes/subject.route.js');
+const facultyRoutes = require('./routes/faculty.route.js');
+const batchRoutes = require('./routes/batch.route.js');
+
+// config
+const config = require('./config/config.js');
+
+// utils
+const logger = require('./utils/logger.js');
+
+// middlewares
+const morganMiddleware = require('./middlewares/morgan.middleware.js');
 
 const app = express();
-dotenv.config();
-
-// environment_variables
-const PORT_NUMBER = process.env.PORT_NUMBER || 9999;
-const CLIENT_BASE_URL = process.env.CLIENT_BASE_URL;
-const MONGODB_URL = process.env.MONGODB_URL;
 
 app.use(
   cors({
-    origin: CLIENT_BASE_URL,
+    origin: config.clientBaseUrl,
+    methods: 'GET,POST,PUT,DELETE',
+    credentials: true,
   })
 );
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json({ extended: true }));
+app.use(
+  bodyParser.json({
+    extended: true,
+    verify: (req, res, buf, encoding) => {
+      if (!req.is('application/json')) {
+        return res.status(400).json({
+          data: null,
+          success: false,
+          message: 'Invalid Request',
+        });
+      }
 
-// routes
-app.use('/', indexRoutes);
+      try {
+        JSON.parse(buf.toString(encoding));
+      } catch (err) {
+        logger.error('Invalid Request');
+        return res.status(400).json({
+          data: null,
+          success: false,
+          message: 'Invalid Request',
+        });
+      }
+    },
+  })
+);
+
+// app.use(
+//   session({
+//     secret: config.sessionSecret,
+//     resave: false,
+//     saveUninitialized: false,
+//   })
+// );
+
+app.use(passport.initialize());
+// app.use(passport.session());
+require('./utils/passport.js')(passport);
+
+app.use(morganMiddleware);
+
+app.use('/', homeRoutes);
+app.use('/auth', authRoutes);
+app.use('/subject', subjectRoutes);
+app.use('/faculty', facultyRoutes);
+app.use('/batch', batchRoutes);
 
 const httpServer = http.createServer(app);
 
 mongoose.set('strictQuery', true);
 mongoose.connect(
-  MONGODB_URL,
+  config.mongodbUrl,
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   },
   (error) => {
     if (error) {
-      console.log(error);
+      logger.error(error.message);
     } else {
-      console.log('Database connected');
-      httpServer.listen(PORT_NUMBER, (err) => {
+      logger.info('Database Connected');
+      httpServer.listen(config.portNumber, (err) => {
         if (err) {
-          console.log(err);
+          logger.error(err.message);
         } else {
-          console.log(`Server running on http://localhost:${PORT_NUMBER}`);
+          logger.info(`Server running on ${config.serverBaseUrl}`);
         }
       });
     }
