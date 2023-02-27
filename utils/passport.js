@@ -1,4 +1,5 @@
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const jwt = require('jsonwebtoken');
 
 // models
 const userModel = require('../models/user.model.js');
@@ -20,6 +21,10 @@ module.exports = (passport) => {
 
         userModel.findOne({ googleId: profile.id }).then((existingUser) => {
           if (existingUser) {
+            let token = jwt.sign({ id: existingUser._id }, config.jwtSecret, {
+              expiresIn: 60 * 60,
+            });
+            existingUser.token = token;
             done(null, existingUser);
           } else {
             new userModel({
@@ -29,7 +34,13 @@ module.exports = (passport) => {
               avatar: avatar,
             })
               .save()
-              .then((user) => done(null, user));
+              .then((user) => {
+                let token = jwt.sign({ id: user._id }, config.jwtSecret, {
+                  expiresIn: 24 * 60 * 60,
+                });
+                user.token = token;
+                done(null, user);
+              });
           }
         });
       }
