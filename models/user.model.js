@@ -28,8 +28,14 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: '',
     },
-    batchId: {
-      type: String,
+    batch: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'batches',
+      default: '',
+    },
+    faculty: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'faculties',
       default: '',
     },
     isHidden: {

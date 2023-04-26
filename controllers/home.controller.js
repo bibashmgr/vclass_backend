@@ -1,16 +1,18 @@
+const httpStatus = require('http-status');
+
 // config
 const logger = require('../utils/logger.js');
 
 const welcomeScreen = (req, res) => {
   try {
-    res.status(200).json({
+    res.status(httpStatus.OK).json({
       data: null,
       success: true,
       message: 'Hello',
     });
     logger.info('Hello');
   } catch (error) {
-    res.status(500).json({
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
       data: null,
       success: false,
       message: error.message,
@@ -19,9 +21,4 @@ const welcomeScreen = (req, res) => {
   }
 };
 
-const errorScreen = (req, res, next) => {
-  next();
-  logger.error('This is Error');
-};
-
-module.exports = { welcomeScreen, errorScreen };
+module.exports = { welcomeScreen };

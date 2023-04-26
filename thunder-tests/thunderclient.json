@@ -350,12 +350,12 @@
     "method": "POST",
     "sortNum": 10000,
     "created": "2023-04-26T08:55:34.899Z",
-    "modified": "2023-04-26T09:30:36.390Z",
+    "modified": "2023-04-26T14:07:19.327Z",
     "headers": [],
     "params": [],
     "body": {
       "type": "json",
-      "raw": "{\n  \"year\": 2018,\n  \"facultyId\": \"6448e3a068416d43420838c1\",\n  \"currentSemester\": 10\n}",
+      "raw": "{\n  \"year\": 2019,\n  \"faculty\": \"6448e4d54f122e6971e7550a\",\n  \"currentSemester\": 10\n}",
       "form": []
     },
     "auth": {

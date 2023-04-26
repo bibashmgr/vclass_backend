@@ -6,8 +6,9 @@ const batchSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
-    facultyId: {
-      type: String,
+    faculty: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'faculties',
       required: true,
     },
     currentSemester: {

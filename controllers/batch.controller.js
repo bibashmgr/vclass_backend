@@ -1,3 +1,5 @@
+const httpStatus = require('http-status');
+
 // models
 const batchModel = require('../models/batch.model.js');
 const facultyModel = require('../models/faculty.model.js');
@@ -7,17 +9,17 @@ const logger = require('../utils/logger.js');
 
 const createBatch = async (req, res) => {
   try {
-    facultyModel.findById(req.body.facultyId).then((facultyInfo) => {
+    facultyModel.findById(req.body.faculty).then((facultyInfo) => {
       if (facultyInfo) {
         new batchModel({
           year: req.body.year,
-          facultyId: req.body.facultyId,
+          faculty: req.body.faculty,
           currentSemester: req.body.currentSemester,
         })
           .save()
           .then((batch) => {
             logger.info('Create Batch');
-            return res.status(201).json({
+            return res.status(httpStatus.CREATED).json({
               data: batch,
               success: true,
               message: 'Create Batch',
@@ -25,7 +27,7 @@ const createBatch = async (req, res) => {
           });
       } else {
         logger.error('Invalid FacultyId');
-        return res.status(400).json({
+        return res.status(httpStatus.BAD_REQUEST).json({
           data: null,
           success: false,
           message: 'Invalid FacultyId',
@@ -34,7 +36,7 @@ const createBatch = async (req, res) => {
     });
   } catch (error) {
     logger.error(error.message);
-    return res.status(500).json({
+    return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
       data: null,
       success: false,
       message: error.message,
@@ -44,17 +46,20 @@ const createBatch = async (req, res) => {
 
 const getBatches = async (req, res) => {
   try {
-    batchModel.find().then((batches) => {
-      logger.info('Fetch batches');
-      return res.status(200).json({
-        data: batches,
-        success: true,
-        message: 'Fetch batches',
+    batchModel
+      .find()
+      .populate('faculty')
+      .then((batches) => {
+        logger.info('Fetch batches');
+        return res.status(httpStatus.OK).json({
+          data: batches,
+          success: true,
+          message: 'Fetch batches',
+        });
       });
-    });
   } catch (error) {
     logger.error(error.message);
-    return res.status(500).json({
+    return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
       data: null,
       success: false,
       message: error.message,
@@ -67,14 +72,14 @@ const getBatch = async (req, res) => {
     batchModel.findById(req.params.id).then((batch) => {
       if (batch) {
         logger.info('Fetch batchInfo');
-        return res.status(200).json({
+        return res.status(httpStatus.OK).json({
           data: batch,
           success: true,
           message: 'Fetch batchInfo',
         });
       } else {
         logger.warn('Failed to fetch batchInfo');
-        return res.status(404).json({
+        return res.status(httpStatus.NOT_FOUND).json({
           data: null,
           success: false,
           message: 'Failed to fetch batchInfo',
@@ -83,7 +88,7 @@ const getBatch = async (req, res) => {
     });
   } catch (error) {
     logger.error(error.message);
-    return res.status(500).json({
+    return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
       data: null,
       success: false,
       message: error.message,
@@ -93,14 +98,14 @@ const getBatch = async (req, res) => {
 
 const updateBatch = async (req, res) => {
   try {
-    facultyModel.findById(req.body.facultyId).then((facultyInfo) => {
+    facultyModel.findById(req.body.faculty).then((facultyInfo) => {
       if (facultyInfo) {
         batchModel
           .findByIdAndUpdate(
             req.params.id,
             {
               year: req.body.year,
-              facultyId: req.body.facultyId,
+              faculty: req.body.faculty,
               currentSemester: req.body.currentSemester,
             },
             { new: true }
@@ -108,14 +113,14 @@ const updateBatch = async (req, res) => {
           .then((batch) => {
             if (batch) {
               logger.info('Update batchInfo');
-              return res.status(200).json({
+              return res.status(httpStatus.OK).json({
                 data: batch,
                 success: true,
                 message: 'Update batchInfo',
               });
             } else {
               logger.warn('Failed to update batchInfo');
-              return res.status(404).json({
+              return res.status(httpStatus.NOT_FOUND).json({
                 data: null,
                 success: false,
                 message: 'Failed to update batchInfo',
@@ -124,7 +129,7 @@ const updateBatch = async (req, res) => {
           });
       } else {
         logger.error('Invalid FacultyId');
-        return res.status(400).json({
+        return res.status(httpStatus.BAD_REQUEST).json({
           data: null,
           success: false,
           message: 'Invalid FacultyId',
@@ -133,7 +138,7 @@ const updateBatch = async (req, res) => {
     });
   } catch (error) {
     logger.error(error.message);
-    return res.status(500).json({
+    return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
       data: null,
       success: false,
       message: error.message,
@@ -153,7 +158,7 @@ const changeBatchStatus = async (req, res) => {
           )
           .then((updatedBatch) => {
             logger.info("Change batch's status");
-            return res.status(200).json({
+            return res.status(httpStatus.OK).json({
               data: updatedBatch,
               success: true,
               message: "Change batch's status",
@@ -161,7 +166,7 @@ const changeBatchStatus = async (req, res) => {
           });
       } else {
         logger.warn('Failed to modify batchInfo');
-        return res.status(404).json({
+        return res.status(httpStatus.NOT_FOUND).json({
           data: null,
           success: false,
           message: 'Failed to modify batchInfo',
@@ -170,7 +175,7 @@ const changeBatchStatus = async (req, res) => {
     });
   } catch (error) {
     logger.error(error.message);
-    return res.status(500).json({
+    return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
       data: null,
       success: false,
       message: error.message,

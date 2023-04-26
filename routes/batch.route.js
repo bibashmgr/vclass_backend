@@ -24,7 +24,7 @@ router.post(
     .withMessage('Year is required')
     .isLength({ min: 4, max: 4 })
     .withMessage('Year is invalid'),
-  check('facultyId').custom((value) => {
+  check('faculty').custom((value) => {
     if (!mongoose.isObjectIdOrHexString(value)) {
       return Promise.reject('Invalid facultyId');
     }
@@ -59,7 +59,7 @@ router.patch(
     .isLength({ min: 4, max: 4 })
     .withMessage('Year is invalid')
     .toInt(),
-  check('facultyId').custom((value) => {
+  check('faculty').custom((value) => {
     if (!mongoose.isObjectIdOrHexString(value)) {
       return Promise.reject('Invalid facultyId');
     }

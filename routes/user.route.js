@@ -25,7 +25,8 @@ router.patch(
   '/:id',
   check('role').not().isEmpty().withMessage('Role is empty').trim(),
   check('college').not().isEmpty().withMessage('College is empty').trim(),
-  check('batchId').isMongoId().withMessage('Invalid batchId'),
+  check('batch').isMongoId().withMessage('Invalid batchId'),
+  check('faculty').isMongoId().withMessage('Invalid facultyId'),
   check('id').isMongoId().withMessage('Invalid userId'),
   bodyValidation,
   updateUser

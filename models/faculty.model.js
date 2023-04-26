@@ -11,7 +11,8 @@ const facultySchema = new mongoose.Schema(
         {
           type: [
             {
-              type: String,
+              type: mongoose.Schema.Types.ObjectId,
+              ref: 'subjects',
             },
           ],
         },
