@@ -8,7 +8,7 @@ const {
   getFaculties,
   getFaculty,
   updateFaculty,
-  deleteFaculty,
+  changeFacultyStatus,
 } = require('../controllers/faculty.controller.js');
 
 // middlewares
@@ -41,7 +41,7 @@ router.get(
   getFaculty
 );
 
-router.put(
+router.patch(
   '/:id',
   check('name').not().isEmpty().withMessage('Name is required').trim(),
   check('semesters')
@@ -58,11 +58,11 @@ router.put(
   updateFaculty
 );
 
-router.delete(
-  '/:id',
+router.patch(
+  '/status/:id',
   check('id').isMongoId().withMessage('Invalid facultyId'),
   bodyValidation,
-  deleteFaculty
+  changeFacultyStatus
 );
 
 module.exports = router;

@@ -116,22 +116,30 @@ const updateFaculty = async (req, res) => {
   }
 };
 
-const deleteFaculty = async (req, res) => {
+const changeFacultyStatus = async (req, res) => {
   try {
-    facultyModel.findByIdAndDelete(req.params.id).then((faculty) => {
+    facultyModel.findById(req.params.id).then((faculty) => {
       if (faculty) {
-        logger.info('Delete faculty');
-        return res.status(200).json({
-          data: null,
-          success: true,
-          message: 'Delete faculty',
-        });
+        facultyModel
+          .findByIdAndUpdate(
+            req.params.id,
+            { isHidden: !faculty.isHidden },
+            { new: true }
+          )
+          .then((updatedFaculty) => {
+            logger.info("Change faculty's status");
+            return res.status(200).json({
+              data: updatedFaculty,
+              success: true,
+              message: "Change faculty's status",
+            });
+          });
       } else {
-        logger.warn('Failed to delete faculty');
+        logger.warn('Failed to modify facultyInfo');
         return res.status(404).json({
           data: null,
           success: false,
-          message: 'Failed to delete faculty',
+          message: 'Failed to modify facultyInfo',
         });
       }
     });
@@ -150,5 +158,5 @@ module.exports = {
   getFaculties,
   getFaculty,
   updateFaculty,
-  deleteFaculty,
+  changeFacultyStatus,
 };
