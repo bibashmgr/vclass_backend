@@ -8,19 +8,30 @@ const logger = require('../utils/logger.js');
 
 const createFaculty = async (req, res) => {
   try {
-    new facultyModel({
-      name: req.body.name,
-      semesters: req.body.semesters,
-    })
-      .save()
-      .then((faculty) => {
-        logger.info('Create Faculty');
-        return res.status(httpStatus.CREATED).json({
-          data: faculty,
-          success: true,
-          message: 'Create Faculty',
+    facultyModel.exists({ name: req.body.name }).then((existingFaculty) => {
+      if (existingFaculty) {
+        logger.error('Name already exists');
+        return res.status(httpStatus.BAD_REQUEST).json({
+          data: null,
+          success: false,
+          message: 'Name already exists',
         });
-      });
+      } else {
+        new facultyModel({
+          name: req.body.name,
+          semesters: req.body.semesters,
+        })
+          .save()
+          .then((faculty) => {
+            logger.info('Create Faculty');
+            return res.status(httpStatus.CREATED).json({
+              data: faculty,
+              success: true,
+              message: 'Create Faculty',
+            });
+          });
+      }
+    });
   } catch (error) {
     logger.error(error.message);
     return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({

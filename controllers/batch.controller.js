@@ -9,31 +9,53 @@ const logger = require('../utils/logger.js');
 
 const createBatch = async (req, res) => {
   try {
-    facultyModel.findById(req.body.faculty).then((facultyInfo) => {
-      if (facultyInfo) {
-        new batchModel({
-          year: req.body.year,
-          faculty: req.body.faculty,
-          currentSemester: req.body.currentSemester,
-        })
-          .save()
-          .then((batch) => {
-            logger.info('Create Batch');
-            return res.status(httpStatus.CREATED).json({
-              data: batch,
-              success: true,
-              message: 'Create Batch',
-            });
+    batchModel
+      .exists({ year: req.body.year, faculty: req.body.faculty })
+      .then((existingBatch) => {
+        if (existingBatch) {
+          logger.error('Batch already exists');
+          return res.status(httpStatus.BAD_REQUEST).json({
+            data: null,
+            success: false,
+            message: 'Batch already exists',
           });
-      } else {
-        logger.error('Invalid FacultyId');
-        return res.status(httpStatus.BAD_REQUEST).json({
-          data: null,
-          success: false,
-          message: 'Invalid FacultyId',
-        });
-      }
-    });
+        } else {
+          facultyModel.findById(req.body.faculty).then((faculty) => {
+            if (faculty) {
+              if (req.body.currentSemester > faculty.semesters.length) {
+                logger.error('Invalid currentSemester');
+                return res.status(httpStatus.BAD_REQUEST).json({
+                  data: null,
+                  success: false,
+                  message: 'Invalid currentSemester',
+                });
+              } else {
+                new batchModel({
+                  year: req.body.year,
+                  faculty: req.body.faculty,
+                  currentSemester: req.body.currentSemester,
+                })
+                  .save()
+                  .then((batch) => {
+                    logger.info('Create Batch');
+                    return res.status(httpStatus.CREATED).json({
+                      data: batch,
+                      success: true,
+                      message: 'Create Batch',
+                    });
+                  });
+              }
+            } else {
+              logger.error('Invalid FacultyId');
+              return res.status(httpStatus.BAD_REQUEST).json({
+                data: null,
+                success: false,
+                message: 'Invalid FacultyId',
+              });
+            }
+          });
+        }
+      });
   } catch (error) {
     logger.error(error.message);
     return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
@@ -98,8 +120,8 @@ const getBatch = async (req, res) => {
 
 const updateBatch = async (req, res) => {
   try {
-    facultyModel.findById(req.body.faculty).then((facultyInfo) => {
-      if (facultyInfo) {
+    facultyModel.findById(req.body.faculty).then((faculty) => {
+      if (faculty) {
         batchModel
           .findByIdAndUpdate(
             req.params.id,
