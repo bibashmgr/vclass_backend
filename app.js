@@ -12,6 +12,7 @@ const authRoutes = require('./routes/auth.route.js');
 const subjectRoutes = require('./routes/subject.route.js');
 const facultyRoutes = require('./routes/faculty.route.js');
 const batchRoutes = require('./routes/batch.route.js');
+const userRoutes = require('./routes/user.route.js');
 
 // config
 const config = require('./config/config.js');
@@ -74,9 +75,10 @@ app.use(morganMiddleware);
 
 app.use('/', homeRoutes);
 app.use('/auth', authRoutes);
-app.use('/subject', subjectRoutes);
-app.use('/faculty', facultyRoutes);
-app.use('/batch', batchRoutes);
+app.use('/subjects', subjectRoutes);
+app.use('/faculties', facultyRoutes);
+app.use('/batches', batchRoutes);
+app.use('/users', userRoutes);
 
 const httpServer = http.createServer(app);
 
