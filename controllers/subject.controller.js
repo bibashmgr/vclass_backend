@@ -116,22 +116,30 @@ const updateSubject = async (req, res) => {
   }
 };
 
-const deleteSubject = async (req, res) => {
+const changeSubjectStatus = async (req, res) => {
   try {
-    subjectModel.findByIdAndDelete(req.params.id).then((subject) => {
+    subjectModel.findById(req.params.id).then((subject) => {
       if (subject) {
-        logger.info('Delete subject');
-        return res.status(200).json({
-          data: null,
-          success: true,
-          message: 'Delete subject',
-        });
+        subjectModel
+          .findByIdAndUpdate(
+            req.params.id,
+            { isHidden: !subject.isHidden },
+            { new: true }
+          )
+          .then((updatedSubject) => {
+            logger.info("Change subject's status");
+            return res.status(200).json({
+              data: updatedSubject,
+              success: true,
+              message: "Change subject's status",
+            });
+          });
       } else {
-        logger.warn('Failed to delete subject');
+        logger.warn('Failed to modify subjectInfo');
         return res.status(404).json({
           data: null,
           success: false,
-          message: 'Failed to delete subject',
+          message: 'Failed to modify subjectInfo',
         });
       }
     });
@@ -150,5 +158,5 @@ module.exports = {
   getSubjects,
   getSubject,
   updateSubject,
-  deleteSubject,
+  changeSubjectStatus,
 };

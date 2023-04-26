@@ -1,5 +1,4 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const { check } = require('express-validator');
 
 // controllers
@@ -8,7 +7,7 @@ const {
   getSubjects,
   getSubject,
   updateSubject,
-  deleteSubject,
+  changeSubjectStatus,
 } = require('../controllers/subject.controller.js');
 
 // middlewares
@@ -33,7 +32,7 @@ router.get(
   getSubject
 );
 
-router.put(
+router.patch(
   '/:id',
   check('name').not().isEmpty().withMessage('Name is empty').trim(),
   check('codeName').not().isEmpty().withMessage('CodeName is empty').trim(),
@@ -42,11 +41,11 @@ router.put(
   updateSubject
 );
 
-router.delete(
-  '/:id',
+router.patch(
+  '/status/:id',
   check('id').isMongoId().withMessage('Invalid subjectId'),
   bodyValidation,
-  deleteSubject
+  changeSubjectStatus
 );
 
 module.exports = router;
