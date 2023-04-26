@@ -12,12 +12,16 @@ const {
 } = require('../controllers/faculty.controller.js');
 
 // middlewares
-const { bodyValidation } = require('../middlewares/validation.middleware.js');
+const {
+  bodyValidation,
+  userValidation,
+} = require('../middlewares/validation.middleware.js');
 
 const router = express.Router();
 
 router.post(
   '/create',
+  userValidation,
   check('name').not().isEmpty().withMessage('Name is required').trim(),
   check('semesters')
     .isArray()
@@ -32,10 +36,11 @@ router.post(
   createFaculty
 );
 
-router.get('/', getFaculties);
+router.get('/', userValidation, getFaculties);
 
 router.get(
   '/:id',
+  userValidation,
   check('id').isMongoId().withMessage('Invalid facultyId'),
   bodyValidation,
   getFaculty
@@ -43,6 +48,7 @@ router.get(
 
 router.patch(
   '/:id',
+  userValidation,
   check('name').not().isEmpty().withMessage('Name is required').trim(),
   check('semesters')
     .isArray()
@@ -60,6 +66,7 @@ router.patch(
 
 router.patch(
   '/status/:id',
+  userValidation,
   check('id').isMongoId().withMessage('Invalid facultyId'),
   bodyValidation,
   changeFacultyStatus

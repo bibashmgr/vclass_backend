@@ -8,14 +8,20 @@ const {
   updateUser,
   changeUserStatus,
 } = require('../controllers/user.controller.js');
-const { bodyValidation } = require('../middlewares/validation.middleware.js');
+
+// middlewares
+const {
+  bodyValidation,
+  userValidation,
+} = require('../middlewares/validation.middleware.js');
 
 const router = express.Router();
 
-router.get('/', getUsers);
+router.get('/', userValidation, getUsers);
 
 router.get(
   '/:id',
+  userValidation,
   check('id').isMongoId().withMessage('Invalid userId'),
   bodyValidation,
   getUser
@@ -23,6 +29,7 @@ router.get(
 
 router.patch(
   '/:id',
+  userValidation,
   check('role').not().isEmpty().withMessage('Role is empty').trim(),
   check('college').not().isEmpty().withMessage('College is empty').trim(),
   check('batch').isMongoId().withMessage('Invalid batchId'),
@@ -34,6 +41,7 @@ router.patch(
 
 router.patch(
   '/status/:id',
+  userValidation,
   check('id').isMongoId().withMessage('Invalid userId'),
   bodyValidation,
   changeUserStatus

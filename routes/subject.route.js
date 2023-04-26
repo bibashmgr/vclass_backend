@@ -11,22 +11,27 @@ const {
 } = require('../controllers/subject.controller.js');
 
 // middlewares
-const { bodyValidation } = require('../middlewares/validation.middleware.js');
+const {
+  bodyValidation,
+  userValidation,
+} = require('../middlewares/validation.middleware.js');
 
 const router = express.Router();
 
 router.post(
   '/create',
+  userValidation,
   check('name').not().isEmpty().withMessage('Name is empty').trim(),
   check('codeName').not().isEmpty().withMessage('CodeName is empty').trim(),
   bodyValidation,
   createSubject
 );
 
-router.get('/', getSubjects);
+router.get('/', userValidation, getSubjects);
 
 router.get(
   '/:id',
+  userValidation,
   check('id').isMongoId().withMessage('Invalid subjectId'),
   bodyValidation,
   getSubject
@@ -34,6 +39,7 @@ router.get(
 
 router.patch(
   '/:id',
+  userValidation,
   check('name').not().isEmpty().withMessage('Name is empty').trim(),
   check('codeName').not().isEmpty().withMessage('CodeName is empty').trim(),
   check('id').isMongoId().withMessage('Invalid subjectId'),
@@ -43,6 +49,7 @@ router.patch(
 
 router.patch(
   '/status/:id',
+  userValidation,
   check('id').isMongoId().withMessage('Invalid subjectId'),
   bodyValidation,
   changeSubjectStatus

@@ -12,12 +12,16 @@ const {
 } = require('../controllers/batch.controller.js');
 
 // middlewares
-const { bodyValidation } = require('../middlewares/validation.middleware.js');
+const {
+  bodyValidation,
+  userValidation,
+} = require('../middlewares/validation.middleware.js');
 
 const router = express.Router();
 
 router.post(
   '/create',
+  userValidation,
   check('year')
     .trim()
     .isInt()
@@ -41,10 +45,11 @@ router.post(
   createBatch
 );
 
-router.get('/', getBatches);
+router.get('/', userValidation, getBatches);
 
 router.get(
   '/:id',
+  userValidation,
   check('id').isMongoId().withMessage('Invalid batchId'),
   bodyValidation,
   getBatch
@@ -52,6 +57,7 @@ router.get(
 
 router.patch(
   '/:id',
+  userValidation,
   check('year')
     .trim()
     .isNumeric()
@@ -79,6 +85,7 @@ router.patch(
 
 router.patch(
   '/status/:id',
+  userValidation,
   check('id').isMongoId().withMessage('Invalid batchId'),
   bodyValidation,
   changeBatchStatus

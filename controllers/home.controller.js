@@ -8,9 +8,9 @@ const welcomeScreen = (req, res) => {
     res.status(httpStatus.OK).json({
       data: null,
       success: true,
-      message: 'Hello',
+      message: 'Welcome to vclass',
     });
-    logger.info('Hello');
+    logger.info('Welcome to vclass');
   } catch (error) {
     res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
       data: null,
