@@ -80,7 +80,7 @@
     "method": "POST",
     "sortNum": 20000,
     "created": "2023-04-26T07:07:49.149Z",
-    "modified": "2023-04-26T08:46:47.257Z",
+    "modified": "2023-04-26T17:44:27.235Z",
     "headers": [],
     "params": [],
     "body": {
@@ -332,7 +332,7 @@
     "method": "GET",
     "sortNum": 10000,
     "created": "2023-04-26T08:55:34.898Z",
-    "modified": "2023-04-26T08:56:22.248Z",
+    "modified": "2023-04-26T17:40:20.249Z",
     "headers": [],
     "params": [],
     "auth": {
@@ -427,6 +427,24 @@
     "sortNum": 20000,
     "created": "2023-04-26T08:55:34.902Z",
     "modified": "2023-04-26T09:17:51.323Z",
+    "headers": [],
+    "params": [],
+    "auth": {
+      "type": "bearer",
+      "bearer": "{{TOKEN}}"
+    },
+    "tests": []
+  },
+  {
+    "_id": "0274584b-993a-4001-a21a-00de8557abe2",
+    "colId": "df1df179-fca6-4468-a081-81d652f76457",
+    "containerId": "",
+    "name": "Welcome Screen",
+    "url": "{{BASE_URL}}/users",
+    "method": "GET",
+    "sortNum": 10000,
+    "created": "2023-04-26T17:46:49.598Z",
+    "modified": "2023-04-26T17:47:19.171Z",
     "headers": [],
     "params": [],
     "auth": {

@@ -13,7 +13,7 @@
       },
       {
         "name": "TOKEN",
-        "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NDkzMGRiZGEyN2FjOGM3NDhiYTc0NiIsImlhdCI6MTY4MjUxODM5OCwiZXhwIjoxNjgyNTIxOTk4fQ.oonxMBqiOXUne9YBU5MnkNUKKyuXAVJT1KOoe2esbRk"
+        "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NDkzMGRiZGEyN2FjOGM3NDhiYTc0NiIsImlhdCI6MTY4MjUzMDM5NywiZXhwIjoxNjgyNTMzOTk3fQ.p0kPT-LSEO8LLxU6nm24oBHAlpduda74BD0KQQw0uHI"
       },
       {
         "name": "USER_ID",
@@ -21,7 +21,7 @@
       },
       {
         "name": "SUBJECT_ID",
-        "value": "6448e4f8de5b5195bfe6fb90"
+        "value": "644962fca5fe2da906a619ca"
       },
       {
         "name": "FACULTY_ID",
