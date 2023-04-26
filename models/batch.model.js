@@ -10,7 +10,7 @@ const batchSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    semester: {
+    currentSemester: {
       type: Number,
       required: true,
     },

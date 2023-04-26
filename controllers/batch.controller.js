@@ -12,7 +12,7 @@ const createBatch = async (req, res) => {
         new batchModel({
           year: req.body.year,
           facultyId: req.body.facultyId,
-          semester: req.body.semester,
+          currentSemester: req.body.currentSemester,
         })
           .save()
           .then((batch) => {
@@ -101,7 +101,7 @@ const updateBatch = async (req, res) => {
             {
               year: req.body.year,
               facultyId: req.body.facultyId,
-              semester: req.body.semester,
+              currentSemester: req.body.currentSemester,
             },
             { new: true }
           )
@@ -141,22 +141,30 @@ const updateBatch = async (req, res) => {
   }
 };
 
-const deleteBatch = async (req, res) => {
+const changeBatchStatus = async (req, res) => {
   try {
-    batchModel.findByIdAndDelete(req.params.id).then((batch) => {
+    batchModel.findById(req.params.id).then((batch) => {
       if (batch) {
-        logger.info('Delete batch');
-        return res.status(200).json({
-          data: null,
-          success: true,
-          message: 'Delete batch',
-        });
+        batchModel
+          .findByIdAndUpdate(
+            req.params.id,
+            { isHidden: !batch.isHidden },
+            { new: true }
+          )
+          .then((updatedBatch) => {
+            logger.info("Change batch's status");
+            return res.status(200).json({
+              data: updatedBatch,
+              success: true,
+              message: "Change batch's status",
+            });
+          });
       } else {
-        logger.warn('Failed to delete batch');
+        logger.warn('Failed to modify batchInfo');
         return res.status(404).json({
           data: null,
           success: false,
-          message: 'Failed to delete batch',
+          message: 'Failed to modify batchInfo',
         });
       }
     });
@@ -175,5 +183,5 @@ module.exports = {
   getBatches,
   getBatch,
   updateBatch,
-  deleteBatch,
+  changeBatchStatus,
 };
