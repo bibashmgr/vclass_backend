@@ -14,6 +14,10 @@ const batchSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    isHidden: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,

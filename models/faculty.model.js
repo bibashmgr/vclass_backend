@@ -18,6 +18,10 @@ const facultySchema = new mongoose.Schema(
       ],
       default: [],
     },
+    isHidden: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,
