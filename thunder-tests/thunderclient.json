@@ -1,0 +1,210 @@
+[
+  {
+    "_id": "c9302227-3158-4a44-a664-e44b2f049ec4",
+    "colId": "8fc1ec7f-93b7-4c02-9cfa-56ac148f9e8a",
+    "containerId": "",
+    "name": "Get Subjects",
+    "url": "{{BASE_URL}}/subjects",
+    "method": "GET",
+    "sortNum": 10000,
+    "created": "2023-04-26T07:01:06.701Z",
+    "modified": "2023-04-26T07:18:08.443Z",
+    "headers": [],
+    "params": [],
+    "auth": {
+      "type": "bearer",
+      "bearer": "{{TOKEN}}"
+    },
+    "tests": []
+  },
+  {
+    "_id": "2be1109a-3537-42f0-aea8-9fd84f31a337",
+    "colId": "60beebc4-8f2f-4bb3-97d9-fe92fcbcb004",
+    "containerId": "6e28fba2-02af-4d71-af59-1803e064586b",
+    "name": "Get Profile",
+    "url": "{{BASE_URL}}/auth/login/success",
+    "method": "GET",
+    "sortNum": 10000,
+    "created": "2023-04-26T07:03:13.413Z",
+    "modified": "2023-04-26T07:06:20.862Z",
+    "headers": [],
+    "params": [],
+    "auth": {
+      "type": "bearer",
+      "bearer": "{{TOKEN}}"
+    },
+    "tests": []
+  },
+  {
+    "_id": "34dbc690-5f09-48e5-9944-ccbf26987e17",
+    "colId": "60beebc4-8f2f-4bb3-97d9-fe92fcbcb004",
+    "containerId": "",
+    "name": "Get Users",
+    "url": "{{BASE_URL}}/users",
+    "method": "GET",
+    "sortNum": 40000,
+    "created": "2023-04-26T07:04:28.046Z",
+    "modified": "2023-04-26T07:18:14.133Z",
+    "headers": [],
+    "params": [],
+    "auth": {
+      "type": "bearer",
+      "bearer": "{{TOKEN}}"
+    },
+    "tests": []
+  },
+  {
+    "_id": "2d5e4f7f-5d68-4d93-bc7b-1a9c088bfce6",
+    "colId": "8fc1ec7f-93b7-4c02-9cfa-56ac148f9e8a",
+    "containerId": "153497bb-dc70-43dd-b053-6ae6666aa757",
+    "name": "Get SubjecInfo",
+    "url": "{{BASE_URL}}/subjects/{{SUBJECT_ID}}",
+    "method": "GET",
+    "sortNum": 40000,
+    "created": "2023-04-26T07:07:09.845Z",
+    "modified": "2023-04-26T07:13:24.664Z",
+    "headers": [],
+    "params": [],
+    "tests": []
+  },
+  {
+    "_id": "4b7678cd-bcf2-404e-aac3-efaa71406a6c",
+    "colId": "8fc1ec7f-93b7-4c02-9cfa-56ac148f9e8a",
+    "containerId": "153497bb-dc70-43dd-b053-6ae6666aa757",
+    "name": "Create Subject",
+    "url": "{{BASE_URL}}/subjects/create",
+    "method": "POST",
+    "sortNum": 20000,
+    "created": "2023-04-26T07:07:49.149Z",
+    "modified": "2023-04-26T08:21:53.764Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"name\" : \"Subject 06\",\n  \"codeName\": \"SUB06\"\n}",
+      "form": []
+    },
+    "auth": {
+      "type": "bearer",
+      "bearer": "{{TOKEN}}"
+    },
+    "tests": [
+      {
+        "type": "set-env-var",
+        "custom": "json.data._id",
+        "action": "setto",
+        "value": "{{SUBJECT_ID}}"
+      }
+    ]
+  },
+  {
+    "_id": "9d386181-a008-498a-b263-186a5ee3d875",
+    "colId": "8fc1ec7f-93b7-4c02-9cfa-56ac148f9e8a",
+    "containerId": "153497bb-dc70-43dd-b053-6ae6666aa757",
+    "name": "Update SubjectInfo",
+    "url": "{{BASE_URL}}/subjects/{{SUBJECT_ID}}",
+    "method": "PATCH",
+    "sortNum": 70000,
+    "created": "2023-04-26T07:16:19.676Z",
+    "modified": "2023-04-26T08:08:26.539Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"name\": \"Subject 01\",\n  \"codeName\": \"SUB 01\"\n}",
+      "form": []
+    },
+    "auth": {
+      "type": "bearer",
+      "bearer": "{{TOKEN}}"
+    },
+    "tests": []
+  },
+  {
+    "_id": "59bed6e1-047a-4448-bdf9-7a96a8957b5b",
+    "colId": "8fc1ec7f-93b7-4c02-9cfa-56ac148f9e8a",
+    "containerId": "153497bb-dc70-43dd-b053-6ae6666aa757",
+    "name": "Change Subject status",
+    "url": "{{BASE_URL}}/subjects/status/{{SUBJECT_ID}}",
+    "method": "PATCH",
+    "sortNum": 80000,
+    "created": "2023-04-26T07:36:02.924Z",
+    "modified": "2023-04-26T08:08:38.936Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{}",
+      "form": []
+    },
+    "auth": {
+      "type": "bearer",
+      "bearer": "{{TOKEN}}"
+    },
+    "tests": []
+  },
+  {
+    "_id": "d06763c8-64ee-4183-a079-56210f7c1792",
+    "colId": "60beebc4-8f2f-4bb3-97d9-fe92fcbcb004",
+    "containerId": "6e28fba2-02af-4d71-af59-1803e064586b",
+    "name": "Get UserInfo",
+    "url": "{{BASE_URL}}/users/{{USER_ID}}",
+    "method": "GET",
+    "sortNum": 20000,
+    "created": "2023-04-26T08:09:42.442Z",
+    "modified": "2023-04-26T08:10:10.427Z",
+    "headers": [],
+    "params": [],
+    "auth": {
+      "type": "bearer",
+      "bearer": "{{TOKEN}}"
+    },
+    "tests": []
+  },
+  {
+    "_id": "89cd62c5-c58c-463e-b520-21f1b9064996",
+    "colId": "60beebc4-8f2f-4bb3-97d9-fe92fcbcb004",
+    "containerId": "6e28fba2-02af-4d71-af59-1803e064586b",
+    "name": "Update UserInfo",
+    "url": "{{BASE_URL}}/users/{{USER_ID}}",
+    "method": "PATCH",
+    "sortNum": 30000,
+    "created": "2023-04-26T08:10:56.249Z",
+    "modified": "2023-04-26T08:16:31.281Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"role\": \"admin\",\n  \"college\": \"gces\",\n  \"batchId\": \"asdcsdc\"\n}",
+      "form": []
+    },
+    "auth": {
+      "type": "bearer",
+      "bearer": "{{TOKEN}}"
+    },
+    "tests": []
+  },
+  {
+    "_id": "7c92c96a-4232-4501-b343-d5713e80a312",
+    "colId": "60beebc4-8f2f-4bb3-97d9-fe92fcbcb004",
+    "containerId": "6e28fba2-02af-4d71-af59-1803e064586b",
+    "name": "Changes User Status",
+    "url": "{{BASE_URL}}/users/status/{{USER_ID}}",
+    "method": "PATCH",
+    "sortNum": 40000,
+    "created": "2023-04-26T08:17:03.969Z",
+    "modified": "2023-04-26T08:17:36.060Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{}",
+      "form": []
+    },
+    "auth": {
+      "type": "bearer",
+      "bearer": "{{TOKEN}}"
+    },
+    "tests": []
+  }
+]

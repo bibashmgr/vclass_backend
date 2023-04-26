@@ -1,0 +1,39 @@
+[
+  {
+    "_id": "8fc1ec7f-93b7-4c02-9cfa-56ac148f9e8a",
+    "colName": "subjects",
+    "created": "2023-04-26T06:55:21.816Z",
+    "sortNum": 2500,
+    "folders": [
+      {
+        "_id": "153497bb-dc70-43dd-b053-6ae6666aa757",
+        "name": "Single Subject",
+        "containerId": "",
+        "created": "2023-04-26T07:06:00.597Z",
+        "sortNum": 10000
+      }
+    ]
+  },
+  {
+    "_id": "e4ec37fe-f157-49ed-8c16-b78bc4298bfa",
+    "colName": "faculties",
+    "created": "2023-04-26T06:55:45.143Z",
+    "sortNum": 5000,
+    "folders": []
+  },
+  {
+    "_id": "60beebc4-8f2f-4bb3-97d9-fe92fcbcb004",
+    "colName": "users",
+    "created": "2023-04-26T07:02:44.325Z",
+    "sortNum": 1250,
+    "folders": [
+      {
+        "_id": "6e28fba2-02af-4d71-af59-1803e064586b",
+        "name": "Single User",
+        "containerId": "",
+        "created": "2023-04-26T07:05:04.917Z",
+        "sortNum": 10000
+      }
+    ]
+  }
+]
