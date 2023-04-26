@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const passport = require('passport');
-const session = require('express-session');
+// const session = require('express-session');
 
 // routes
 const homeRoutes = require('./routes/home.route.js');

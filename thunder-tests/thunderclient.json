@@ -238,12 +238,12 @@
     "method": "POST",
     "sortNum": 10000,
     "created": "2023-04-26T08:35:39.160Z",
-    "modified": "2023-04-26T08:44:57.724Z",
+    "modified": "2023-04-26T17:54:58.647Z",
     "headers": [],
     "params": [],
     "body": {
       "type": "json",
-      "raw": "{\n  \"name\" : \"BECE\",\n  \"semesters\": [\n    [\n      \"6448df00a6384c6cbd08b221\",\n      \"6448df219ba1f47ce4a22263\"\n    ],\n    [\n      \"6448e3b9ed399ed5e750916d\",\n      \"6448e3c0178c9be56bea8060\"\n    ]\n  ]\n}",
+      "raw": "{\n  \"name\" : \"ABCD\",\n  \"semesters\": [\n    [\n      \"6448df00a6384c6cbd08b221\",\n      \"6448df219ba1f47ce4a22263\"\n    ],\n    [\n      \"6448e3b9ed399ed5e750916d\",\n      \"6448e3c0178c9be56bea8060\"\n    ]\n  ]\n}",
       "form": []
     },
     "auth": {
@@ -350,12 +350,12 @@
     "method": "POST",
     "sortNum": 10000,
     "created": "2023-04-26T08:55:34.899Z",
-    "modified": "2023-04-26T14:07:19.327Z",
+    "modified": "2023-04-26T18:55:51.880Z",
     "headers": [],
     "params": [],
     "body": {
       "type": "json",
-      "raw": "{\n  \"year\": 2019,\n  \"faculty\": \"6448e4d54f122e6971e7550a\",\n  \"currentSemester\": 10\n}",
+      "raw": "{\n  \"year\": 2020,\n  \"faculty\": \"6449701f3569be8897c1f090\",\n  \"currentSemester\": 1\n}",
       "form": []
     },
     "auth": {
