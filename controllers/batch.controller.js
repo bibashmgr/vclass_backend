@@ -34,6 +34,7 @@ const createBatch = async (req, res) => {
                   year: req.body.year,
                   faculty: req.body.faculty,
                   currentSemester: req.body.currentSemester,
+                  desc: req.body.desc,
                 })
                   .save()
                   .then((batch) => {
@@ -132,6 +133,7 @@ const updateBatch = async (req, res) => {
               year: req.body.year,
               faculty: req.body.faculty,
               currentSemester: req.body.currentSemester,
+              desc: req.body.desc,
             },
             { new: true }
           )

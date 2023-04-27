@@ -19,6 +19,11 @@ const facultySchema = new mongoose.Schema(
       ],
       require: true,
     },
+    desc: {
+      type: String,
+      optional: true,
+      default: '',
+    },
     isHidden: {
       type: Boolean,
       default: false,

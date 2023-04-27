@@ -20,6 +20,7 @@ const createFaculty = async (req, res) => {
         new facultyModel({
           name: req.body.name,
           semesters: req.body.semesters,
+          desc: req.body.desc,
         })
           .save()
           .then((faculty) => {
@@ -111,6 +112,7 @@ const updateFaculty = async (req, res) => {
         {
           name: req.body.name,
           semesters: req.body.semesters,
+          desc: req.body.desc,
         },
         { new: true }
       )

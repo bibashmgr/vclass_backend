@@ -11,6 +11,7 @@ const createSubject = async (req, res) => {
     new subjectModel({
       name: req.body.name,
       codeName: req.body.codeName,
+      desc: req.body.desc,
     })
       .save()
       .then((subject) => {
@@ -88,6 +89,7 @@ const updateSubject = async (req, res) => {
         {
           name: req.body.name,
           codeName: req.body.codeName,
+          desc: req.body.desc,
         },
         { new: true }
       )

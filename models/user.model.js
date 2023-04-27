@@ -29,8 +29,8 @@ const userSchema = new mongoose.Schema(
       default: '',
     },
     batch: {
-      type: String,
-      default: '',
+      type: Number,
+      default: null,
     },
     faculty: {
       type: String,
