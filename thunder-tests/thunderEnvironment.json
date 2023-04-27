@@ -13,7 +13,7 @@
       },
       {
         "name": "TOKEN",
-        "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NDkzMGRiZGEyN2FjOGM3NDhiYTc0NiIsImlhdCI6MTY4MjUzNDMyNCwiZXhwIjoxNjgyNTM3OTI0fQ.XCePAzEOF7FN2eRSxyZK41DrXTdtJ9UVzIy8efgsYdw"
+        "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NDkzMGRiZGEyN2FjOGM3NDhiYTc0NiIsImlhdCI6MTY4MjU3NjA1OCwiZXhwIjoxNjgyNjYyNDU4fQ.72XRn4jJFMwQ7-g8Bq21Qp9eTROaOtowOpwoQtL9vCM"
       },
       {
         "name": "USER_ID",
@@ -25,11 +25,11 @@
       },
       {
         "name": "FACULTY_ID",
-        "value": "6449701f3569be8897c1f090"
+        "value": "644a21cbbaebb45696e9fd1e"
       },
       {
         "name": "BATCH_ID",
-        "value": "644973b770011351e0db5dfc"
+        "value": "644a1246f652f3544fb98714"
       }
     ]
   }

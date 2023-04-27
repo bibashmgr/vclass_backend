@@ -238,12 +238,12 @@
     "method": "POST",
     "sortNum": 10000,
     "created": "2023-04-26T08:35:39.160Z",
-    "modified": "2023-04-26T17:54:58.647Z",
+    "modified": "2023-04-27T07:18:33.777Z",
     "headers": [],
     "params": [],
     "body": {
       "type": "json",
-      "raw": "{\n  \"name\" : \"ABCD\",\n  \"semesters\": [\n    [\n      \"6448df00a6384c6cbd08b221\",\n      \"6448df219ba1f47ce4a22263\"\n    ],\n    [\n      \"6448e3b9ed399ed5e750916d\",\n      \"6448e3c0178c9be56bea8060\"\n    ]\n  ]\n}",
+      "raw": "{\n  \"name\" : \"PQRS\",\n  \"semesters\": [\n    [\n      \"6448df00a6384c6cbd08b221\",\n      \"6448df219ba1f47ce4a22263\"\n    ],\n    [\n      \"6448e3b9ed399ed5e750916d\",\n      \"6448e3c0178c9be56bea8060\"\n    ]\n  ]\n}",
       "form": []
     },
     "auth": {
@@ -350,12 +350,12 @@
     "method": "POST",
     "sortNum": 10000,
     "created": "2023-04-26T08:55:34.899Z",
-    "modified": "2023-04-26T18:55:51.880Z",
+    "modified": "2023-04-27T06:12:22.274Z",
     "headers": [],
     "params": [],
     "body": {
       "type": "json",
-      "raw": "{\n  \"year\": 2020,\n  \"faculty\": \"6449701f3569be8897c1f090\",\n  \"currentSemester\": 1\n}",
+      "raw": "{\n  \"year\": 2015,\n  \"faculty\": \"6449701f3569be8897c1f090\",\n  \"currentSemester\": 1\n}",
       "form": []
     },
     "auth": {
@@ -421,7 +421,7 @@
     "_id": "556da0d7-c1c6-456e-bfbd-7575d30487d1",
     "colId": "972a9f70-f9b4-48df-9117-9137f688000c",
     "containerId": "42f2a1fe-182a-4382-b873-980e04284adc",
-    "name": "Get FacultyInfo",
+    "name": "Get BatchInfo",
     "url": "{{BASE_URL}}/batches/{{BATCH_ID}}",
     "method": "GET",
     "sortNum": 20000,
@@ -440,11 +440,11 @@
     "colId": "df1df179-fca6-4468-a081-81d652f76457",
     "containerId": "",
     "name": "Welcome Screen",
-    "url": "{{BASE_URL}}/users",
+    "url": "{{BASE_URL}}",
     "method": "GET",
     "sortNum": 10000,
     "created": "2023-04-26T17:46:49.598Z",
-    "modified": "2023-04-26T17:47:19.171Z",
+    "modified": "2023-04-27T05:24:46.260Z",
     "headers": [],
     "params": [],
     "auth": {

@@ -44,14 +44,20 @@ const createFaculty = async (req, res) => {
 
 const getFaculties = async (req, res) => {
   try {
-    facultyModel.find().then((faculties) => {
-      logger.info('Fetch faculties');
-      return res.status(httpStatus.OK).json({
-        data: faculties,
-        success: true,
-        message: 'Fetch faculties',
+    facultyModel
+      .find()
+      .populate({
+        path: 'semesters',
+        model: 'subjects',
+      })
+      .then((faculties) => {
+        logger.info('Fetch faculties');
+        return res.status(httpStatus.OK).json({
+          data: faculties,
+          success: true,
+          message: 'Fetch faculties',
+        });
       });
-    });
   } catch (error) {
     logger.error(error.message);
     return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
@@ -64,23 +70,29 @@ const getFaculties = async (req, res) => {
 
 const getFaculty = async (req, res) => {
   try {
-    facultyModel.findById(req.params.id).then((faculty) => {
-      if (faculty) {
-        logger.info('Fetch facultyInfo');
-        return res.status(httpStatus.OK).json({
-          data: faculty,
-          success: true,
-          message: 'Fetch facultyInfo',
-        });
-      } else {
-        logger.warn('Failed to fetch facultyInfo');
-        return res.status(httpStatus.NOT_FOUND).json({
-          data: null,
-          success: false,
-          message: 'Failed to fetch facultyInfo',
-        });
-      }
-    });
+    facultyModel
+      .findById(req.params.id)
+      .populate({
+        path: 'semesters',
+        model: 'subjects',
+      })
+      .then((faculty) => {
+        if (faculty) {
+          logger.info('Fetch facultyInfo');
+          return res.status(httpStatus.OK).json({
+            data: faculty,
+            success: true,
+            message: 'Fetch facultyInfo',
+          });
+        } else {
+          logger.warn('Failed to fetch facultyInfo');
+          return res.status(httpStatus.NOT_FOUND).json({
+            data: null,
+            success: false,
+            message: 'Failed to fetch facultyInfo',
+          });
+        }
+      });
   } catch (error) {
     logger.error(error.message);
     return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({

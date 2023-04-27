@@ -6,6 +6,7 @@ const userModel = require('../models/user.model.js');
 
 // config
 const config = require('../config/config.js');
+const { getEmailInfo } = require('../services/email.service.js');
 
 module.exports = (passport) => {
   passport.use(
@@ -21,26 +22,43 @@ module.exports = (passport) => {
 
         userModel.findOne({ googleId: profile.id }).then((existingUser) => {
           if (existingUser) {
-            let token = jwt.sign({ id: existingUser._id }, config.jwtSecret, {
-              expiresIn: 60 * 60,
-            });
+            let token = jwt.sign(
+              {
+                id: existingUser._id,
+                iat: Math.floor(Date.now() / 1000),
+                exp:
+                  Math.floor(Date.now() / 1000) +
+                  60 * config.jwtAccessExpirationMins,
+              },
+              config.jwtSecret
+            );
             existingUser.token = token;
             done(null, existingUser);
           } else {
-            new userModel({
+            let extractedInfo = getEmailInfo(email);
+            let payload = {
               googleId: profile.id,
               email: email,
               name: profile.displayName,
               avatar: avatar,
-            })
-              .save()
-              .then((user) => {
-                let token = jwt.sign({ id: user._id }, config.jwtSecret, {
-                  expiresIn: 24 * 60 * 60,
-                });
-                user.token = token;
-                done(null, user);
-              });
+            };
+            if (extractedInfo.role === 'student') {
+              payload = { ...payload, ...extractedInfo };
+            }
+            new userModel(payload).save().then((user) => {
+              let token = jwt.sign(
+                {
+                  id: user._id,
+                  iat: Math.floor(Date.now() / 1000),
+                  exp:
+                    Math.floor(Date.now() / 1000) +
+                    60 * config.jwtAccessExpirationMins,
+                },
+                config.jwtSecret
+              );
+              user.token = token;
+              done(null, user);
+            });
           }
         });
       }

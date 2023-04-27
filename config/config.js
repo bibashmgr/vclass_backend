@@ -8,6 +8,7 @@ const serverBaseUrl = process.env.SERVER_BASE_URL;
 const mongodbUrl = process.env.MONGODB_LOCAL_URL;
 const sessionSecret = process.env.SESSION_SECRET;
 const jwtSecret = process.env.JWT_SECRET;
+const jwtAccessExpirationMins = process.env.JWT_ACCESS_EXPIRATION_MINUTES;
 const googleClientId = process.env.GOOGLE_CLIENT_ID;
 const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET;
 
@@ -19,6 +20,7 @@ module.exports = {
   mongodbUrl,
   sessionSecret,
   jwtSecret,
+  jwtAccessExpirationMins,
   googleClientId,
   googleClientSecret,
 };

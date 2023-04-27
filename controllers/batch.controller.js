@@ -91,23 +91,26 @@ const getBatches = async (req, res) => {
 
 const getBatch = async (req, res) => {
   try {
-    batchModel.findById(req.params.id).then((batch) => {
-      if (batch) {
-        logger.info('Fetch batchInfo');
-        return res.status(httpStatus.OK).json({
-          data: batch,
-          success: true,
-          message: 'Fetch batchInfo',
-        });
-      } else {
-        logger.warn('Failed to fetch batchInfo');
-        return res.status(httpStatus.NOT_FOUND).json({
-          data: null,
-          success: false,
-          message: 'Failed to fetch batchInfo',
-        });
-      }
-    });
+    batchModel
+      .findById(req.params.id)
+      .populate('faculty')
+      .then((batch) => {
+        if (batch) {
+          logger.info('Fetch batchInfo');
+          return res.status(httpStatus.OK).json({
+            data: batch,
+            success: true,
+            message: 'Fetch batchInfo',
+          });
+        } else {
+          logger.warn('Failed to fetch batchInfo');
+          return res.status(httpStatus.NOT_FOUND).json({
+            data: null,
+            success: false,
+            message: 'Failed to fetch batchInfo',
+          });
+        }
+      });
   } catch (error) {
     logger.error(error.message);
     return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({

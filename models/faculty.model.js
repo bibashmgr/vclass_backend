@@ -17,7 +17,7 @@ const facultySchema = new mongoose.Schema(
           ],
         },
       ],
-      default: [],
+      require: true,
     },
     isHidden: {
       type: Boolean,

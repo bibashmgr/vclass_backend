@@ -29,13 +29,11 @@ const userSchema = new mongoose.Schema(
       default: '',
     },
     batch: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'batches',
+      type: String,
       default: '',
     },
     faculty: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'faculties',
+      type: String,
       default: '',
     },
     isHidden: {

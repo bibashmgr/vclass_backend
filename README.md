@@ -29,3 +29,6 @@ A web server for a classroom management platform called **VCLASS**.
   - [x] Check the currentSemester of batch whether it extends the length of faculty's semesters
 - [ ] User Registration
   - [ ] Check email & Assign role, college, batch, faculty
+  - [x] Create jwt expiration variable in .env
+- [ ] Role Validation
+- [x] Populate subjects in facultySchema 

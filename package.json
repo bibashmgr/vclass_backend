@@ -4,7 +4,8 @@
   "description": "backend for vclass",
   "main": "app.js",
   "scripts": {
-    "dev": "nodemon app.js"
+    "dev": "nodemon app.js",
+    "test": "nodemon tests/index.js"
   },
   "repository": {
     "type": "git",
