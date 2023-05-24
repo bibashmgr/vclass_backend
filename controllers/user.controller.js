@@ -39,7 +39,7 @@ const getUser = async (req, res) => {
           message: 'Fetch userInfo',
         });
       } else {
-        logger.warn('Failed to fetch userInfo');
+        logger.error('Failed to fetch userInfo');
         return res.status(httpStatus.NOT_FOUND).json({
           data: null,
           success: false,
@@ -61,47 +61,35 @@ const updateUser = async (req, res) => {
   try {
     batchModel.findById(req.body.faculty).then((batch) => {
       if (batch) {
-        facultyModel.findById(req.body.faculty).then((faculty) => {
-          if (faculty) {
-            userModel
-              .findByIdAndUpdate(
-                req.params.id,
-                {
-                  role: req.body.role,
-                  college: req.body.college,
-                  batch: req.body.batch,
-                  faculty: req.body.faculty,
-                },
-                { new: true }
-              )
-              .then((user) => {
-                if (user) {
-                  logger.info('Update userInfo');
-                  return res.status(httpStatus.OK).json({
-                    data: user,
-                    success: true,
-                    message: 'Update userInfo',
-                  });
-                } else {
-                  logger.warn('Failed to update userInfo');
-                  return res.status(httpStatus.NOT_FOUND).json({
-                    data: null,
-                    success: false,
-                    message: 'Failed to update userInfo',
-                  });
-                }
+        userModel
+          .findByIdAndUpdate(
+            req.params.id,
+            {
+              role: req.body.role,
+              college: req.body.college,
+              batch: req.body.batch,
+            },
+            { new: true }
+          )
+          .then((user) => {
+            if (user) {
+              logger.info('Update userInfo');
+              return res.status(httpStatus.OK).json({
+                data: user,
+                success: true,
+                message: 'Update userInfo',
               });
-          } else {
-            logger.warn('Invalid facultyId');
-            return res.status(httpStatus.BAD_REQUEST).json({
-              data: null,
-              success: false,
-              message: 'Invalid facultyId',
-            });
-          }
-        });
+            } else {
+              logger.error('Failed to update userInfo');
+              return res.status(httpStatus.NOT_FOUND).json({
+                data: null,
+                success: false,
+                message: 'Failed to update userInfo',
+              });
+            }
+          });
       } else {
-        logger.warn('Invalid batchId');
+        logger.error('Invalid batchId');
         return res.status(httpStatus.BAD_REQUEST).json({
           data: null,
           success: false,
@@ -138,7 +126,7 @@ const changeUserStatus = async (req, res) => {
             });
           });
       } else {
-        logger.warn('Failed to modify userInfo');
+        logger.error('Failed to modify userInfo');
         return res.status(httpStatus.NOT_FOUND).json({
           data: null,
           success: false,

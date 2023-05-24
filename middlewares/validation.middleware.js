@@ -7,6 +7,7 @@ const logger = require('../utils/logger.js');
 
 // config
 const config = require('../config/config.js');
+const userModel = require('../models/user.model.js');
 
 const customFormat = ({ msg }) => {
   return `${msg}`;
@@ -42,8 +43,18 @@ const userValidation = (req, res, next) => {
             message: 'ACCESS DENIED',
           });
         } else {
-          req.userId = decoded.id;
-          next();
+          userModel.findById(decoded.id).then((user) => {
+            if (user) {
+              req.userId = user._id;
+              next();
+            } else {
+              res.status(httpStatus.UNAUTHORIZED).json({
+                data: null,
+                success: false,
+                message: 'ACCESS DENIED',
+              });
+            }
+          });
         }
       });
     } else {
@@ -62,4 +73,16 @@ const userValidation = (req, res, next) => {
   }
 };
 
-module.exports = { bodyValidation, userValidation };
+const roleValidation = (roles) => {
+  if (roles.includes(req.userId)) {
+    // next();
+  } else {
+    res.status(httpStatus.UNAUTHORIZED).json({
+      data: null,
+      success: false,
+      message: 'ACCESS DENIED',
+    });
+  }
+};
+
+module.exports = { bodyValidation, userValidation, roleValidation };

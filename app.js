@@ -4,7 +4,6 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const passport = require('passport');
-// const session = require('express-session');
 
 // routes
 const homeRoutes = require('./routes/home.route.js');
@@ -59,16 +58,7 @@ app.use(
   })
 );
 
-// app.use(
-//   session({
-//     secret: config.sessionSecret,
-//     resave: false,
-//     saveUninitialized: false,
-//   })
-// );
-
 app.use(passport.initialize());
-// app.use(passport.session());
 require('./utils/passport.js')(passport);
 
 app.use(morganMiddleware);
