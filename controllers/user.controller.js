@@ -59,7 +59,7 @@ const getUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
   try {
-    batchModel.findById(req.body.faculty).then((batch) => {
+    batchModel.findById(req.body.batch).then((batch) => {
       if (batch) {
         userModel
           .findByIdAndUpdate(
