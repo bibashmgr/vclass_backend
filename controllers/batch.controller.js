@@ -1,3 +1,5 @@
+const httpStatus = require('http-status');
+
 // models
 const batchModel = require('../models/batch.model.js');
 const facultyModel = require('../models/faculty.model.js');
@@ -7,34 +9,57 @@ const logger = require('../utils/logger.js');
 
 const createBatch = async (req, res) => {
   try {
-    facultyModel.findById(req.body.facultyId).then((facultyInfo) => {
-      if (facultyInfo) {
-        new batchModel({
-          year: req.body.year,
-          facultyId: req.body.facultyId,
-          semester: req.body.semester,
-        })
-          .save()
-          .then((batch) => {
-            logger.info('Create Batch');
-            return res.status(201).json({
-              data: batch,
-              success: true,
-              message: 'Create Batch',
-            });
+    batchModel
+      .exists({ year: req.body.year, faculty: req.body.faculty })
+      .then((existingBatch) => {
+        if (existingBatch) {
+          logger.error('Batch already exists');
+          return res.status(httpStatus.BAD_REQUEST).json({
+            data: null,
+            success: false,
+            message: 'Batch already exists',
           });
-      } else {
-        logger.error('Invalid FacultyId');
-        return res.status(400).json({
-          data: null,
-          success: false,
-          message: 'Invalid FacultyId',
-        });
-      }
-    });
+        } else {
+          facultyModel.findById(req.body.faculty).then((faculty) => {
+            if (faculty) {
+              if (req.body.currentSemester > faculty.semesters.length) {
+                logger.error('Invalid currentSemester');
+                return res.status(httpStatus.BAD_REQUEST).json({
+                  data: null,
+                  success: false,
+                  message: 'Invalid currentSemester',
+                });
+              } else {
+                new batchModel({
+                  year: req.body.year,
+                  faculty: req.body.faculty,
+                  currentSemester: req.body.currentSemester,
+                  desc: req.body.desc,
+                })
+                  .save()
+                  .then((batch) => {
+                    logger.info('Create Batch');
+                    return res.status(httpStatus.CREATED).json({
+                      data: batch,
+                      success: true,
+                      message: 'Create Batch',
+                    });
+                  });
+              }
+            } else {
+              logger.error('Invalid FacultyId');
+              return res.status(httpStatus.BAD_REQUEST).json({
+                data: null,
+                success: false,
+                message: 'Invalid FacultyId',
+              });
+            }
+          });
+        }
+      });
   } catch (error) {
     logger.error(error.message);
-    return res.status(500).json({
+    return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
       data: null,
       success: false,
       message: error.message,
@@ -44,17 +69,20 @@ const createBatch = async (req, res) => {
 
 const getBatches = async (req, res) => {
   try {
-    batchModel.find().then((batches) => {
-      logger.info('Fetch batches');
-      return res.status(200).json({
-        data: batches,
-        success: true,
-        message: 'Fetch batches',
+    batchModel
+      .find()
+      .populate('faculty')
+      .then((batches) => {
+        logger.info('Fetch batches');
+        return res.status(httpStatus.OK).json({
+          data: batches,
+          success: true,
+          message: 'Fetch batches',
+        });
       });
-    });
   } catch (error) {
     logger.error(error.message);
-    return res.status(500).json({
+    return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
       data: null,
       success: false,
       message: error.message,
@@ -64,26 +92,29 @@ const getBatches = async (req, res) => {
 
 const getBatch = async (req, res) => {
   try {
-    batchModel.findById(req.params.id).then((batch) => {
-      if (batch) {
-        logger.info('Fetch batchInfo');
-        return res.status(200).json({
-          data: batch,
-          success: true,
-          message: 'Fetch batchInfo',
-        });
-      } else {
-        logger.warn('Failed to fetch batchInfo');
-        return res.status(404).json({
-          data: null,
-          success: false,
-          message: 'Failed to fetch batchInfo',
-        });
-      }
-    });
+    batchModel
+      .findById(req.params.id)
+      .populate('faculty')
+      .then((batch) => {
+        if (batch) {
+          logger.info('Fetch batchInfo');
+          return res.status(httpStatus.OK).json({
+            data: batch,
+            success: true,
+            message: 'Fetch batchInfo',
+          });
+        } else {
+          logger.warn('Failed to fetch batchInfo');
+          return res.status(httpStatus.NOT_FOUND).json({
+            data: null,
+            success: false,
+            message: 'Failed to fetch batchInfo',
+          });
+        }
+      });
   } catch (error) {
     logger.error(error.message);
-    return res.status(500).json({
+    return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
       data: null,
       success: false,
       message: error.message,
@@ -93,29 +124,30 @@ const getBatch = async (req, res) => {
 
 const updateBatch = async (req, res) => {
   try {
-    facultyModel.findById(req.body.facultyId).then((facultyInfo) => {
-      if (facultyInfo) {
+    facultyModel.findById(req.body.faculty).then((faculty) => {
+      if (faculty) {
         batchModel
           .findByIdAndUpdate(
             req.params.id,
             {
               year: req.body.year,
-              facultyId: req.body.facultyId,
-              semester: req.body.semester,
+              faculty: req.body.faculty,
+              currentSemester: req.body.currentSemester,
+              desc: req.body.desc,
             },
             { new: true }
           )
           .then((batch) => {
             if (batch) {
               logger.info('Update batchInfo');
-              return res.status(200).json({
+              return res.status(httpStatus.OK).json({
                 data: batch,
                 success: true,
                 message: 'Update batchInfo',
               });
             } else {
               logger.warn('Failed to update batchInfo');
-              return res.status(404).json({
+              return res.status(httpStatus.NOT_FOUND).json({
                 data: null,
                 success: false,
                 message: 'Failed to update batchInfo',
@@ -124,7 +156,7 @@ const updateBatch = async (req, res) => {
           });
       } else {
         logger.error('Invalid FacultyId');
-        return res.status(400).json({
+        return res.status(httpStatus.BAD_REQUEST).json({
           data: null,
           success: false,
           message: 'Invalid FacultyId',
@@ -133,7 +165,7 @@ const updateBatch = async (req, res) => {
     });
   } catch (error) {
     logger.error(error.message);
-    return res.status(500).json({
+    return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
       data: null,
       success: false,
       message: error.message,
@@ -141,28 +173,36 @@ const updateBatch = async (req, res) => {
   }
 };
 
-const deleteBatch = async (req, res) => {
+const changeBatchStatus = async (req, res) => {
   try {
-    batchModel.findByIdAndDelete(req.params.id).then((batch) => {
+    batchModel.findById(req.params.id).then((batch) => {
       if (batch) {
-        logger.info('Delete batch');
-        return res.status(200).json({
-          data: null,
-          success: true,
-          message: 'Delete batch',
-        });
+        batchModel
+          .findByIdAndUpdate(
+            req.params.id,
+            { isHidden: !batch.isHidden },
+            { new: true }
+          )
+          .then((updatedBatch) => {
+            logger.info("Change batch's status");
+            return res.status(httpStatus.OK).json({
+              data: updatedBatch,
+              success: true,
+              message: "Change batch's status",
+            });
+          });
       } else {
-        logger.warn('Failed to delete batch');
-        return res.status(404).json({
+        logger.warn('Failed to modify batchInfo');
+        return res.status(httpStatus.NOT_FOUND).json({
           data: null,
           success: false,
-          message: 'Failed to delete batch',
+          message: 'Failed to modify batchInfo',
         });
       }
     });
   } catch (error) {
     logger.error(error.message);
-    return res.status(500).json({
+    return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
       data: null,
       success: false,
       message: error.message,
@@ -175,5 +215,5 @@ module.exports = {
   getBatches,
   getBatch,
   updateBatch,
-  deleteBatch,
+  changeBatchStatus,
 };

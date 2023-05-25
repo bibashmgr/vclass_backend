@@ -1,11 +1,16 @@
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
-const jwt = require('jsonwebtoken');
 
 // models
 const userModel = require('../models/user.model.js');
 
 // config
 const config = require('../config/config.js');
+
+// helpers
+const { getEmailInfo } = require('../helpers/emailExtractor.js');
+
+// services
+const { generateToken } = require('../services/token.service.js');
 
 module.exports = (passport) => {
   passport.use(
@@ -19,30 +24,34 @@ module.exports = (passport) => {
         const email = profile.emails[0].value;
         const avatar = profile.photos[0].value;
 
-        userModel.findOne({ googleId: profile.id }).then((existingUser) => {
-          if (existingUser) {
-            let token = jwt.sign({ id: existingUser._id }, config.jwtSecret, {
-              expiresIn: 60 * 60,
-            });
-            existingUser.token = token;
-            done(null, existingUser);
-          } else {
-            new userModel({
-              googleId: profile.id,
-              email: email,
-              name: profile.displayName,
-              avatar: avatar,
-            })
-              .save()
-              .then((user) => {
-                let token = jwt.sign({ id: user._id }, config.jwtSecret, {
-                  expiresIn: 24 * 60 * 60,
-                });
-                user.token = token;
+        userModel
+          .findOne({ googleId: profile.id })
+          .then(async (existingUser) => {
+            if (existingUser) {
+              let token = generateToken(existingUser._id);
+              existingUser.token = token;
+              done(null, existingUser);
+            } else {
+              let payload = {
+                googleId: profile.id,
+                email: email,
+                name: profile.displayName,
+                avatar: avatar,
+              };
+              let extractedInfo = await getEmailInfo(email);
+              if (extractedInfo.role === 'student') {
+                payload = { ...payload, ...extractedInfo };
+              }
+
+              const user = await userModel(payload).save();
+
+              if (user) {
+                let token = generateToken(user._id);
+                user['token'] = token;
                 done(null, user);
-              });
-          }
-        });
+              }
+            }
+          });
       }
     )
   );

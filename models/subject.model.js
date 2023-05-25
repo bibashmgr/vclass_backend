@@ -10,6 +10,15 @@ const subjectSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    desc: {
+      type: String,
+      optional: true,
+      default: '',
+    },
+    isHidden: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,

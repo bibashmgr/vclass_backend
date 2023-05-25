@@ -1,11 +1,13 @@
 const { validationResult } = require('express-validator');
 const jwt = require('jsonwebtoken');
+const httpStatus = require('http-status');
 
 // utils
 const logger = require('../utils/logger.js');
 
 // config
 const config = require('../config/config.js');
+const userModel = require('../models/user.model.js');
 
 const customFormat = ({ msg }) => {
   return `${msg}`;
@@ -15,7 +17,7 @@ const bodyValidation = (req, res, next) => {
   const errors = validationResult(req).formatWith(customFormat);
   if (!errors.isEmpty()) {
     logger.error(errors.array());
-    return res.status(400).json({
+    return res.status(httpStatus.BAD_REQUEST).json({
       data: null,
       success: false,
       message: errors.array(),
@@ -26,34 +28,56 @@ const bodyValidation = (req, res, next) => {
 };
 
 const userValidation = (req, res, next) => {
-  let token;
-  if (
-    req.headers.authorization &&
-    req.headers.authorization.startsWith('Bearer')
-  ) {
-    try {
+  try {
+    let token;
+    if (
+      req.headers.authorization &&
+      req.headers.authorization.startsWith('Bearer')
+    ) {
       token = req.headers.authorization.split(' ')[1];
       jwt.verify(token, config.jwtSecret, (err, decoded) => {
         if (err) {
-          res.status(400).json({
+          res.status(httpStatus.UNAUTHORIZED).json({
             data: null,
             success: false,
             message: 'ACCESS DENIED',
           });
         } else {
-          req.userId = decoded.id;
-          next();
+          userModel.findById(decoded.id).then((user) => {
+            if (user) {
+              req.userId = user._id;
+              next();
+            } else {
+              res.status(httpStatus.UNAUTHORIZED).json({
+                data: null,
+                success: false,
+                message: 'ACCESS DENIED',
+              });
+            }
+          });
         }
       });
-    } catch (error) {
-      res.status(403).json({
+    } else {
+      res.status(httpStatus.BAD_REQUEST).json({
         data: null,
         success: false,
-        message: 'ACCESS DENIED',
+        message: 'TOKEN NOT FOUND',
       });
     }
+  } catch (error) {
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+      data: null,
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+const roleValidation = (roles) => {
+  if (roles.includes(req.userId)) {
+    // next();
   } else {
-    res.status(401).json({
+    res.status(httpStatus.UNAUTHORIZED).json({
       data: null,
       success: false,
       message: 'ACCESS DENIED',
@@ -61,4 +85,4 @@ const userValidation = (req, res, next) => {
   }
 };
 
-module.exports = { bodyValidation, userValidation };
+module.exports = { bodyValidation, userValidation, roleValidation };

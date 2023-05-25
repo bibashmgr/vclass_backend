@@ -11,12 +11,22 @@ const facultySchema = new mongoose.Schema(
         {
           type: [
             {
-              type: String,
+              type: mongoose.Schema.Types.ObjectId,
+              ref: 'subjects',
             },
           ],
         },
       ],
-      default: [],
+      require: true,
+    },
+    desc: {
+      type: String,
+      optional: true,
+      default: '',
+    },
+    isHidden: {
+      type: Boolean,
+      default: false,
     },
   },
   {

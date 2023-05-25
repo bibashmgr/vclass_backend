@@ -8,49 +8,56 @@ const {
   getBatches,
   getBatch,
   updateBatch,
-  deleteBatch,
+  changeBatchStatus,
 } = require('../controllers/batch.controller.js');
 
 // middlewares
-const { bodyValidation } = require('../middlewares/validation.middleware.js');
+const {
+  bodyValidation,
+  userValidation,
+} = require('../middlewares/validation.middleware.js');
 
 const router = express.Router();
 
 router.post(
   '/create',
+  userValidation,
   check('year')
     .trim()
-    .isNumeric()
+    .isInt()
     .withMessage('Year is required')
     .isLength({ min: 4, max: 4 })
-    .withMessage('Year is invalid')
-    .toInt(),
-  check('facultyId').custom((value) => {
+    .withMessage('Year is invalid'),
+  check('faculty').custom((value) => {
     if (!mongoose.isObjectIdOrHexString(value)) {
       return Promise.reject('Invalid facultyId');
     }
     return true;
   }),
-  check('semester')
+  check('currentSemester')
     .trim()
-    .isNumeric()
-    .withMessage('Semester is required')
-    .toInt(),
+    .not()
+    .isEmpty()
+    .withMessage('CurrentSemester is required')
+    .isInt({ min: 1, max: 10 })
+    .withMessage('Invalid currentSemester'),
   bodyValidation,
   createBatch
 );
 
-router.get('/', getBatches);
+router.get('/', userValidation, getBatches);
 
 router.get(
   '/:id',
+  userValidation,
   check('id').isMongoId().withMessage('Invalid batchId'),
   bodyValidation,
   getBatch
 );
 
-router.put(
+router.patch(
   '/:id',
+  userValidation,
   check('year')
     .trim()
     .isNumeric()
@@ -58,27 +65,30 @@ router.put(
     .isLength({ min: 4, max: 4 })
     .withMessage('Year is invalid')
     .toInt(),
-  check('facultyId').custom((value) => {
+  check('faculty').custom((value) => {
     if (!mongoose.isObjectIdOrHexString(value)) {
       return Promise.reject('Invalid facultyId');
     }
     return true;
   }),
-  check('semester')
-    .trim()
-    .isNumeric()
-    .withMessage('Semester is required')
-    .toInt(),
+  check('currentSemester')
+    .not()
+    .isEmpty()
+    .withMessage('CurrentSemester is required')
+    .isInt({ min: 1, max: 10 })
+    .withMessage('Invalid currentSemester')
+    .trim(),
   check('id').isMongoId().withMessage('Invalid batchId'),
   bodyValidation,
   updateBatch
 );
 
-router.delete(
-  '/:id',
+router.patch(
+  '/status/:id',
+  userValidation,
   check('id').isMongoId().withMessage('Invalid batchId'),
   bodyValidation,
-  deleteBatch
+  changeBatchStatus
 );
 
 module.exports = router;

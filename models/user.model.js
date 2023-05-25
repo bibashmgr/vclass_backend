@@ -28,9 +28,13 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: '',
     },
-    batchId: {
+    batch: {
       type: String,
       default: '',
+    },
+    isHidden: {
+      type: Boolean,
+      default: false,
     },
   },
   {

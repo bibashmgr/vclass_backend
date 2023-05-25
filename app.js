@@ -4,7 +4,6 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const passport = require('passport');
-const session = require('express-session');
 
 // routes
 const homeRoutes = require('./routes/home.route.js');
@@ -12,6 +11,7 @@ const authRoutes = require('./routes/auth.route.js');
 const subjectRoutes = require('./routes/subject.route.js');
 const facultyRoutes = require('./routes/faculty.route.js');
 const batchRoutes = require('./routes/batch.route.js');
+const userRoutes = require('./routes/user.route.js');
 
 // config
 const config = require('./config/config.js');
@@ -27,7 +27,7 @@ const app = express();
 app.use(
   cors({
     origin: config.clientBaseUrl,
-    methods: 'GET,POST,PUT,DELETE',
+    methods: 'GET,POST,PUT,DELETE,PATCH',
     credentials: true,
   })
 );
@@ -58,25 +58,17 @@ app.use(
   })
 );
 
-// app.use(
-//   session({
-//     secret: config.sessionSecret,
-//     resave: false,
-//     saveUninitialized: false,
-//   })
-// );
-
 app.use(passport.initialize());
-// app.use(passport.session());
 require('./utils/passport.js')(passport);
 
 app.use(morganMiddleware);
 
 app.use('/', homeRoutes);
 app.use('/auth', authRoutes);
-app.use('/subject', subjectRoutes);
-app.use('/faculty', facultyRoutes);
-app.use('/batch', batchRoutes);
+app.use('/subjects', subjectRoutes);
+app.use('/faculties', facultyRoutes);
+app.use('/batches', batchRoutes);
+app.use('/users', userRoutes);
 
 const httpServer = http.createServer(app);
 
