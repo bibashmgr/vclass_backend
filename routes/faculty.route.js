@@ -44,7 +44,12 @@ router.get('/batch', userValidation, bodyValidation, getFacultyByBatch);
 router.get(
   '/:id',
   userValidation,
-  check('id').isMongoId().withMessage('Invalid facultyId'),
+  check('id').custom((value) => {
+    if (!mongoose.isObjectIdOrHexString(value)) {
+      return Promise.reject('Invalid facultyId');
+    }
+    return true;
+  }),
   bodyValidation,
   getFaculty
 );
@@ -62,7 +67,12 @@ router.patch(
       }
       return true;
     }),
-  check('id').isMongoId().withMessage('Invalid facultyId'),
+  check('id').custom((value) => {
+    if (!mongoose.isObjectIdOrHexString(value)) {
+      return Promise.reject('Invalid facultyId');
+    }
+    return true;
+  }),
   bodyValidation,
   updateFaculty
 );
@@ -70,7 +80,12 @@ router.patch(
 router.patch(
   '/status/:id',
   userValidation,
-  check('id').isMongoId().withMessage('Invalid facultyId'),
+  check('id').custom((value) => {
+    if (!mongoose.isObjectIdOrHexString(value)) {
+      return Promise.reject('Invalid facultyId');
+    }
+    return true;
+  }),
   bodyValidation,
   changeFacultyStatus
 );
