@@ -12,6 +12,7 @@ const subjectRoutes = require('./routes/subject.route.js');
 const facultyRoutes = require('./routes/faculty.route.js');
 const batchRoutes = require('./routes/batch.route.js');
 const userRoutes = require('./routes/user.route.js');
+const messageRoutes = require('./routes/message.route.js');
 
 // config
 const config = require('./config/config.js');
@@ -69,6 +70,7 @@ app.use('/subjects', subjectRoutes);
 app.use('/faculties', facultyRoutes);
 app.use('/batches', batchRoutes);
 app.use('/users', userRoutes);
+app.use('/messages', messageRoutes);
 
 const httpServer = http.createServer(app);
 

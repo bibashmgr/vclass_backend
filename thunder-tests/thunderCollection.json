@@ -65,5 +65,27 @@
     "created": "2023-04-26T17:47:07.614Z",
     "sortNum": 625,
     "folders": []
+  },
+  {
+    "_id": "d8ae0857-2050-4c03-bec4-38903075b0ae",
+    "colName": "portal",
+    "created": "2023-06-13T12:33:19.398Z",
+    "sortNum": 25000,
+    "folders": []
+  },
+  {
+    "_id": "74aab804-300d-4cb0-9d93-34601dba00f7",
+    "colName": "messages",
+    "created": "2023-06-13T12:33:36.814Z",
+    "sortNum": 35000,
+    "folders": [
+      {
+        "_id": "2f1bc578-7842-4780-9993-75fcfba8b79b",
+        "name": "Single Message",
+        "containerId": "",
+        "created": "2023-06-13T12:34:31.966Z",
+        "sortNum": 10000
+      }
+    ]
   }
 ]

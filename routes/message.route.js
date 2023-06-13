@@ -16,8 +16,31 @@ const {
 
 const router = express.Router();
 
-router.post('/create', userValidation, bodyValidation, createMessage);
+router.post(
+  '/create',
+  check('desc').not().isEmpty().withMessage('Description is empty').trim(),
+  check('subject').custom((value) => {
+    if (!mongoose.isObjectIdOrHexString(value)) {
+      return Promise.reject('Invalid subjectId');
+    }
+    return true;
+  }),
+  userValidation,
+  bodyValidation,
+  createMessage
+);
 
-router.get('/:subjectId', userValidation, bodyValidation, getMessages);
+router.get(
+  '/:subjectId',
+  check('subjectId').custom((value) => {
+    if (!mongoose.isObjectIdOrHexString(value)) {
+      return Promise.reject('Invalid subjectId');
+    }
+    return true;
+  }),
+  userValidation,
+  bodyValidation,
+  getMessages
+);
 
 module.exports = router;
