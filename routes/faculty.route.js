@@ -7,6 +7,7 @@ const {
   createFaculty,
   getFaculties,
   getFaculty,
+  getFacultyByBatch,
   updateFaculty,
   changeFacultyStatus,
 } = require('../controllers/faculty.controller.js');
@@ -37,6 +38,8 @@ router.post(
 );
 
 router.get('/', userValidation, getFaculties);
+
+router.get('/batch', userValidation, bodyValidation, getFacultyByBatch);
 
 router.get(
   '/:id',
