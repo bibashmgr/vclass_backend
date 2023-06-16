@@ -422,11 +422,11 @@
     "colId": "972a9f70-f9b4-48df-9117-9137f688000c",
     "containerId": "42f2a1fe-182a-4382-b873-980e04284adc",
     "name": "Get BatchInfo",
-    "url": "{{BASE_URL}}/batches/{{BATCH_ID}}",
+    "url": "{{BASE_URL}}/batches/6467a186bcc5918859d271c5",
     "method": "GET",
     "sortNum": 20000,
     "created": "2023-04-26T08:55:34.902Z",
-    "modified": "2023-04-26T09:17:51.323Z",
+    "modified": "2023-06-16T18:03:52.619Z",
     "headers": [],
     "params": [],
     "auth": {
@@ -486,6 +486,24 @@
     "sortNum": 20000,
     "created": "2023-06-13T12:34:49.319Z",
     "modified": "2023-06-13T13:07:54.193Z",
+    "headers": [],
+    "params": [],
+    "auth": {
+      "type": "bearer",
+      "bearer": "{{TOKEN}}"
+    },
+    "tests": []
+  },
+  {
+    "_id": "b3ba0616-3490-4b1d-9a0a-1ceac0c0fba9",
+    "colId": "972a9f70-f9b4-48df-9117-9137f688000c",
+    "containerId": "42f2a1fe-182a-4382-b873-980e04284adc",
+    "name": "Get BatchInfo By userId",
+    "url": "http://localhost:9999/batches/userId",
+    "method": "GET",
+    "sortNum": 30000,
+    "created": "2023-06-16T18:15:37.818Z",
+    "modified": "2023-06-16T18:28:14.405Z",
     "headers": [],
     "params": [],
     "auth": {
