@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const passport = require('passport');
+const { Server } = require('socket.io');
 
 // routes
 const homeRoutes = require('./routes/home.route.js');
@@ -22,6 +23,9 @@ const logger = require('./utils/logger.js');
 
 // middlewares
 const morganMiddleware = require('./middlewares/morgan.middleware.js');
+
+// services
+const socketManager = require('./services/socket.service.js');
 
 const app = express();
 
@@ -73,6 +77,14 @@ app.use('/users', userRoutes);
 app.use('/messages', messageRoutes);
 
 const httpServer = http.createServer(app);
+
+const io = new Server(httpServer, {
+  cors: {
+    origin: process.env.CLIENT_BASE_URL,
+  },
+});
+
+socketManager(io);
 
 mongoose.set('strictQuery', true);
 mongoose.connect(
