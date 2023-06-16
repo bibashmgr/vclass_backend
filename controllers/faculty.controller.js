@@ -2,11 +2,9 @@ const httpStatus = require('http-status');
 
 // models
 const facultyModel = require('../models/faculty.model.js');
-const batchModel = require('../models/batch.model.js');
 
 // utils
 const logger = require('../utils/logger.js');
-const userModel = require('../models/user.model.js');
 
 const createFaculty = async (req, res) => {
   try {
@@ -106,54 +104,6 @@ const getFaculty = async (req, res) => {
   }
 };
 
-const getFacultyByBatch = (req, res) => {
-  try {
-    userModel.findById(req.userId).then((user) => {
-      batchModel.findById(user.batch).then((batch) => {
-        if (batch) {
-          facultyModel
-            .findById(batch.faculty)
-            .populate({
-              path: 'semesters',
-              model: 'subjects',
-            })
-            .then((faculty) => {
-              if (faculty) {
-                logger.info('Fetch facultyInfo');
-                return res.status(httpStatus.OK).json({
-                  data: faculty,
-                  success: true,
-                  message: 'Fetch facultyInfo',
-                });
-              } else {
-                logger.warn('Failed to fetch facultyInfo');
-                return res.status(httpStatus.NOT_FOUND).json({
-                  data: null,
-                  success: false,
-                  message: 'Failed to fetch facultyInfo',
-                });
-              }
-            });
-        } else {
-          logger.warn('Invalid batchId');
-          return res.status(httpStatus.NOT_FOUND).json({
-            data: null,
-            success: false,
-            message: 'Invalid batchId',
-          });
-        }
-      });
-    });
-  } catch (error) {
-    logger.error(error.message);
-    return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
-      data: null,
-      success: false,
-      message: error.message,
-    });
-  }
-};
-
 const updateFaculty = async (req, res) => {
   try {
     facultyModel
@@ -234,7 +184,6 @@ module.exports = {
   createFaculty,
   getFaculties,
   getFaculty,
-  getFacultyByBatch,
   updateFaculty,
   changeFacultyStatus,
 };
