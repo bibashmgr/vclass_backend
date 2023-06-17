@@ -25,10 +25,12 @@ const createMessage = async (req, res) => {
               user: req.userId,
             })
               .save()
-              .then((message) => {
+              .then(async (message) => {
+                const populatedMessage = await message.populate('user');
+
                 logger.info('Create Message');
                 return res.status(httpStatus.CREATED).json({
-                  data: message,
+                  data: populatedMessage,
                   success: true,
                   message: 'Create Message',
                 });
