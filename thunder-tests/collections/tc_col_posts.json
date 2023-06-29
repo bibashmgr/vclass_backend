@@ -18,12 +18,18 @@
             "colId": "9215df24-c14e-4e28-b658-55807215757b",
             "containerId": "",
             "name": "Get All Posts",
-            "url": "",
+            "url": "{{BASE_URL}}/posts/subject/6451d4efb2162abf5f4fdd14",
             "method": "GET",
             "sortNum": 10000,
             "created": "2023-06-28T04:46:46.160Z",
-            "modified": "2023-06-28T04:46:46.160Z",
-            "headers": []
+            "modified": "2023-06-29T14:06:08.954Z",
+            "headers": [],
+            "params": [],
+            "auth": {
+                "type": "bearer",
+                "bearer": "{{TOKEN}}"
+            },
+            "tests": []
         },
         {
             "_id": "87f977aa-c81b-4f0d-92a6-b54a16d52073",
@@ -34,19 +40,72 @@
             "method": "POST",
             "sortNum": 20000,
             "created": "2023-06-28T04:47:01.887Z",
-            "modified": "2023-06-28T06:07:46.094Z",
+            "modified": "2023-06-29T13:50:12.859Z",
             "headers": [],
             "params": [],
             "body": {
-                "type": "formdata",
-                "raw": "",
-                "form": [],
-                "files": [
-                    {
-                        "name": "files",
-                        "value": "e:\\Downloads\\file (2).jpg"
-                    }
-                ]
+                "type": "json",
+                "raw": "{\n  \"title\": \"Test\",\n  \"category\": \"material\",\n  \"subject\": \"6451d4efb2162abf5f4fdd14\",\n  \"desc\": \"This is for testing\",\n  \"files\": [\n    \"649bc41d350fb137b62c818e\",\n    \"649bc470a39c5b8a726d7937\"\n  ]\n}",
+                "form": []
+            },
+            "auth": {
+                "type": "bearer",
+                "bearer": "{{TOKEN}}"
+            },
+            "tests": []
+        },
+        {
+            "_id": "50e4702c-656a-4cc8-ad82-317a99fd4063",
+            "colId": "9215df24-c14e-4e28-b658-55807215757b",
+            "containerId": "26dbb690-069f-4058-94ef-da90e8ed412d",
+            "name": "Get Post",
+            "url": "{{BASE_URL}}/posts/649d9871354479994071db3d",
+            "method": "GET",
+            "sortNum": 30000,
+            "created": "2023-06-29T14:04:44.293Z",
+            "modified": "2023-06-29T14:43:43.737Z",
+            "headers": [],
+            "params": [],
+            "auth": {
+                "type": "bearer",
+                "bearer": "{{TOKEN}}"
+            },
+            "tests": []
+        },
+        {
+            "_id": "12f3948a-cf45-4354-8f42-967bc1d02aef",
+            "colId": "9215df24-c14e-4e28-b658-55807215757b",
+            "containerId": "26dbb690-069f-4058-94ef-da90e8ed412d",
+            "name": "Delete Post",
+            "url": "{{BASE_URL}}/posts/649d81c8e47e44086cca5a1b",
+            "method": "DELETE",
+            "sortNum": 40000,
+            "created": "2023-06-29T14:22:44.873Z",
+            "modified": "2023-06-29T14:41:14.513Z",
+            "headers": [],
+            "params": [],
+            "auth": {
+                "type": "bearer",
+                "bearer": "{{TOKEN}}"
+            },
+            "tests": []
+        },
+        {
+            "_id": "ca728a87-8a7f-486a-b006-c93d17769cfd",
+            "colId": "9215df24-c14e-4e28-b658-55807215757b",
+            "containerId": "26dbb690-069f-4058-94ef-da90e8ed412d",
+            "name": "Update Post",
+            "url": "{{BASE_URL}}/posts/649d9871354479994071db3d",
+            "method": "PATCH",
+            "sortNum": 25000,
+            "created": "2023-06-29T14:43:10.031Z",
+            "modified": "2023-06-29T14:46:47.838Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"title\": \"Test 1\",\n  \"desc\": \"This is for testing purpose.\",\n  \"files\": [\n    \"649bc41d350fb137b62c818e\"\n  ]\n}",
+                "form": []
             },
             "auth": {
                 "type": "bearer",

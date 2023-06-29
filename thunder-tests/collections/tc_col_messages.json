@@ -41,11 +41,11 @@
             "colId": "74aab804-300d-4cb0-9d93-34601dba00f7",
             "containerId": "",
             "name": "Get Mesasges",
-            "url": "{{BASE_URL}}/messages/6451d4efb2162abf5f4fdd14",
+            "url": "{{BASE_URL}}/messages/subject/6451d4efb2162abf5f4fdd14",
             "method": "GET",
             "sortNum": 20000,
             "created": "2023-06-13T12:34:49.319Z",
-            "modified": "2023-06-13T13:07:54.193Z",
+            "modified": "2023-06-29T14:07:37.017Z",
             "headers": [],
             "params": [],
             "auth": {
