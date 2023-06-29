@@ -14,6 +14,8 @@ const facultyRoutes = require('./routes/faculty.route.js');
 const batchRoutes = require('./routes/batch.route.js');
 const userRoutes = require('./routes/user.route.js');
 const messageRoutes = require('./routes/message.route.js');
+const fileRoutes = require('./routes/file.route.js');
+const postRoutes = require('./routes/post.route.js');
 
 // config
 const config = require('./config/config.js');
@@ -26,6 +28,9 @@ const morganMiddleware = require('./middlewares/morgan.middleware.js');
 
 // services
 const socketManager = require('./services/socket.service.js');
+
+// helpers
+const GfsBucket = require('./helpers/gridfsManager.js');
 
 const app = express();
 
@@ -75,6 +80,8 @@ app.use('/faculties', facultyRoutes);
 app.use('/batches', batchRoutes);
 app.use('/users', userRoutes);
 app.use('/messages', messageRoutes);
+app.use('/files', fileRoutes);
+app.use('/posts', postRoutes);
 
 const httpServer = http.createServer(app);
 
@@ -98,6 +105,7 @@ mongoose.connect(
       logger.error(error.message);
     } else {
       logger.info('Database Connected');
+      new GfsBucket();
       httpServer.listen(config.portNumber, (err) => {
         if (err) {
           logger.error(err.message);
