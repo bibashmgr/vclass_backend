@@ -45,7 +45,7 @@ const userValidation = (req, res, next) => {
         } else {
           userModel.findById(decoded.id).then((user) => {
             if (user) {
-              req.userId = user._id;
+              req.user = user;
               next();
             } else {
               res.status(httpStatus.UNAUTHORIZED).json({

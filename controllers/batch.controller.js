@@ -213,45 +213,43 @@ const changeBatchStatus = async (req, res) => {
 
 const getBatchByUserId = async (req, res) => {
   try {
-    userModel.findById(req.userId).then((user) => {
-      batchModel
-        .findById(user.batch)
-        .populate({
-          path: 'faculty',
-          populate: {
-            path: 'semesters',
-            model: 'subjects',
-          },
-        })
-        .then(async (batch) => {
-          if (batch) {
-            let newBatch = batch;
-            let newSemesters = [];
+    batchModel
+      .findById(req.user.batch)
+      .populate({
+        path: 'faculty',
+        populate: {
+          path: 'semesters',
+          model: 'subjects',
+        },
+      })
+      .then(async (batch) => {
+        if (batch) {
+          let newBatch = batch;
+          let newSemesters = [];
 
-            await newBatch.faculty.semesters.map((semester, index) => {
-              if (index + 1 <= batch.currentSemester) {
-                newSemesters.push(semester);
-              }
-            });
+          await newBatch.faculty.semesters.map((semester, index) => {
+            if (index + 1 <= batch.currentSemester) {
+              newSemesters.push(semester);
+            }
+          });
 
-            newBatch.faculty.semesters = newSemesters;
+          newBatch.faculty.semesters = newSemesters;
 
-            logger.info('Fetch batchInfo');
-            return res.status(httpStatus.OK).json({
-              data: newBatch,
-              success: true,
-              message: 'Fetch batchInfo',
-            });
-          } else {
-            logger.warn('Failed to fetch batchInfo');
-            return res.status(httpStatus.NOT_FOUND).json({
-              data: null,
-              success: false,
-              message: 'Failed to fetch batchInfo',
-            });
-          }
-        });
-    });
+          logger.info('Fetch batchInfo');
+          return res.status(httpStatus.OK).json({
+            data: newBatch,
+            success: true,
+            message: 'Fetch batchInfo',
+          });
+        } else {
+          logger.warn('Failed to fetch batchInfo');
+          return res.status(httpStatus.NOT_FOUND).json({
+            data: null,
+            success: false,
+            message: 'Failed to fetch batchInfo',
+          });
+        }
+      });
   } catch (error) {
     logger.error(error.message);
     return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
