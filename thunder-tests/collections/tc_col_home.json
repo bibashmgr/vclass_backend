@@ -1,0 +1,27 @@
+{
+    "_id": "df1df179-fca6-4468-a081-81d652f76457",
+    "colName": "home",
+    "created": "2023-04-26T17:47:07.614Z",
+    "sortNum": 625,
+    "folders": [],
+    "requests": [
+        {
+            "_id": "0274584b-993a-4001-a21a-00de8557abe2",
+            "colId": "df1df179-fca6-4468-a081-81d652f76457",
+            "containerId": "",
+            "name": "Welcome Screen",
+            "url": "{{BASE_URL}}",
+            "method": "GET",
+            "sortNum": 10000,
+            "created": "2023-04-26T17:46:49.598Z",
+            "modified": "2023-04-27T05:24:46.260Z",
+            "headers": [],
+            "params": [],
+            "auth": {
+                "type": "bearer",
+                "bearer": "{{TOKEN}}"
+            },
+            "tests": []
+        }
+    ]
+}
