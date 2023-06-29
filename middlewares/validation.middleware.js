@@ -73,16 +73,7 @@ const userValidation = (req, res, next) => {
   }
 };
 
-const roleValidation = (roles) => {
-  if (roles.includes(req.userId)) {
-    // next();
-  } else {
-    res.status(httpStatus.UNAUTHORIZED).json({
-      data: null,
-      success: false,
-      message: 'ACCESS DENIED',
-    });
-  }
+module.exports = {
+  bodyValidation,
+  userValidation,
 };
-
-module.exports = { bodyValidation, userValidation, roleValidation };
