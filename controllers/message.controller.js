@@ -5,7 +5,6 @@ const logger = require('../utils/logger.js');
 
 // models
 const messageModel = require('../models/message.model.js');
-const userModel = require('../models/user.model.js');
 const portalModel = require('../models/portal.model.js');
 
 const createMessage = async (req, res) => {
@@ -19,7 +18,6 @@ const createMessage = async (req, res) => {
         if (portal) {
           new messageModel({
             desc: req.body.desc,
-            subject: req.body.subject,
             portal: portal._id,
             user: req.user._id,
           })
@@ -37,22 +35,22 @@ const createMessage = async (req, res) => {
         } else {
           new portalModel({
             subject: req.body.subject,
-            batch: user.batch,
+            batch: req.user.batch,
           })
             .save()
             .then((newPortal) => {
               new messageModel({
                 desc: req.body.desc,
-                subject: req.body.subject,
                 portal: newPortal._id,
                 user: req.user._id,
               })
                 .save()
-                .populate('user')
-                .then((message) => {
+                .then(async (message) => {
+                  const populatedMessage = await message.populate('user');
+
                   logger.info('Create Message');
                   return res.status(httpStatus.CREATED).json({
-                    data: message,
+                    data: populatedMessage,
                     success: true,
                     message: 'Create Message',
                   });
@@ -81,7 +79,6 @@ const getMessages = async (req, res) => {
         if (portal) {
           messageModel
             .find({
-              subject: req.params.subjectId,
               portal: portal._id,
             })
             .populate('user')
@@ -96,7 +93,7 @@ const getMessages = async (req, res) => {
         } else {
           new portalModel({
             subject: req.params.subjectId,
-            batch: user.batch,
+            batch: req.user.batch,
           })
             .save()
             .then((newPortal) => {

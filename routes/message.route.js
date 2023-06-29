@@ -31,7 +31,7 @@ router.post(
 );
 
 router.get(
-  '/:subjectId',
+  '/subject/:subjectId',
   check('subjectId').custom((value) => {
     if (!mongoose.isObjectIdOrHexString(value)) {
       return Promise.reject('Invalid subjectId');
