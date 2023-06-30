@@ -3,7 +3,6 @@ const httpStatus = require('http-status');
 // models
 const batchModel = require('../models/batch.model.js');
 const facultyModel = require('../models/faculty.model.js');
-const userModel = require('../models/user.model.js');
 
 // utils
 const logger = require('../utils/logger.js');

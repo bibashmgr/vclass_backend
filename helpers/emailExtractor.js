@@ -1,5 +1,9 @@
+// models
 const facultyModel = require('../models/faculty.model.js');
 const batchModel = require('../models/batch.model.js');
+
+// utils
+const logger = require('../utils/logger.js');
 
 const destructureEmail = (email) => {
   let emailArray = email.split('@');
