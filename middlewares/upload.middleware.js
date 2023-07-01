@@ -15,7 +15,7 @@ const storage = new GridFsStorage({
           console.log(err);
           return reject(err);
         }
-        const filename = buf.toString('hex') + path.extname(file.originalname);
+        const filename = buf.toString('hex') + '_' + file.originalname;
         const fileInfo = {
           filename: filename,
           bucketName: 'uploads',

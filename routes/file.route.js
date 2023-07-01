@@ -15,7 +15,7 @@ const router = express.Router();
 
 router.post('/create', userValidation, upload.array('files', 5), createFile);
 
-router.get('/:fileName', userValidation, downloadFile);
+router.get('/:fileName', downloadFile);
 
 router.delete('/:fileName/delete', userValidation, deleteFile);
 

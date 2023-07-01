@@ -8,6 +8,9 @@ const fileModel = require('../models/file.model.js');
 // utils
 const logger = require('../utils/logger.js');
 
+// helpers
+const GfsBucket = require('../helpers/gridfsManager.js');
+
 const createPost = async (req, res) => {
   try {
     portalModel
@@ -230,6 +233,7 @@ const updatePost = async (req, res) => {
 
 const deletePost = async (req, res) => {
   try {
+    let gfsBucket = new GfsBucket();
     postModel.findByIdAndDelete(req.params.id).then((post) => {
       if (post) {
         if (post.category === 'submission') {
@@ -243,6 +247,11 @@ const deletePost = async (req, res) => {
               logger.info('Pull postRef from assignment');
             });
         }
+
+        post.files.map((file) => {
+          gfsBucket.delete(file);
+          logger.info('Delete file');
+        });
 
         logger.info('Delete post');
         return res.status(httpStatus.OK).json({
