@@ -142,6 +142,24 @@
                 "bearer": "{{TOKEN}}"
             },
             "tests": []
+        },
+        {
+            "_id": "6a988cbf-6bf4-49eb-9c01-0923f2499819",
+            "colId": "972a9f70-f9b4-48df-9117-9137f688000c",
+            "containerId": "",
+            "name": "Get Batches by portal",
+            "url": "{{BASE_URL}}/batches/portal",
+            "method": "GET",
+            "sortNum": 20000,
+            "created": "2023-07-02T11:06:17.297Z",
+            "modified": "2023-07-02T11:06:37.292Z",
+            "headers": [],
+            "params": [],
+            "auth": {
+                "type": "bearer",
+                "bearer": "{{TOKEN}}"
+            },
+            "tests": []
         }
     ]
 }
