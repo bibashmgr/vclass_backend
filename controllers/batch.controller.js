@@ -3,6 +3,7 @@ const httpStatus = require('http-status');
 // models
 const batchModel = require('../models/batch.model.js');
 const facultyModel = require('../models/faculty.model.js');
+const portalModel = require('../models/portal.model.js');
 
 // utils
 const logger = require('../utils/logger.js');
@@ -259,6 +260,43 @@ const getBatchByUserId = async (req, res) => {
   }
 };
 
+const getBatchesByPortal = async (req, res) => {
+  try {
+    let batches = [];
+
+    portalModel
+      .find({ teacher: req.user._id })
+      .populate({
+        path: 'batch',
+        populate: { path: 'faculty' },
+      })
+      .then((portals) => {
+        portals.map((portal) => {
+          let isBatchExist = batches.find(
+            (batch) => batch._id === portal.batch._id
+          );
+
+          if (!isBatchExist) {
+            batches.push(portal.batch);
+          }
+        });
+
+        return res.status(httpStatus.OK).json({
+          data: batches,
+          success: true,
+          message: 'Fetch Batches',
+        });
+      });
+  } catch (error) {
+    logger.error(error.message);
+    return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+      data: null,
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 module.exports = {
   createBatch,
   getBatches,
@@ -266,4 +304,5 @@ module.exports = {
   updateBatch,
   changeBatchStatus,
   getBatchByUserId,
+  getBatchesByPortal,
 };

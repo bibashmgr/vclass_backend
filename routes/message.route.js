@@ -12,26 +12,20 @@ const {
 const {
   bodyValidation,
   userValidation,
+  portalValidation,
 } = require('../middlewares/validation.middleware.js');
 
 const router = express.Router();
 
 router.post(
-  '/create',
+  '/:batchId/:subjectId/create',
   check('desc').not().isEmpty().withMessage('Description is empty').trim(),
-  check('subject').custom((value) => {
+  check('batchId').custom((value) => {
     if (!mongoose.isObjectIdOrHexString(value)) {
-      return Promise.reject('Invalid subjectId');
+      return Promise.reject('Invalid batchId');
     }
     return true;
   }),
-  userValidation,
-  bodyValidation,
-  createMessage
-);
-
-router.get(
-  '/subject/:subjectId',
   check('subjectId').custom((value) => {
     if (!mongoose.isObjectIdOrHexString(value)) {
       return Promise.reject('Invalid subjectId');
@@ -40,6 +34,27 @@ router.get(
   }),
   userValidation,
   bodyValidation,
+  portalValidation,
+  createMessage
+);
+
+router.get(
+  '/:batchId/:subjectId',
+  check('batchId').custom((value) => {
+    if (!mongoose.isObjectIdOrHexString(value)) {
+      return Promise.reject('Invalid batchId');
+    }
+    return true;
+  }),
+  check('subjectId').custom((value) => {
+    if (!mongoose.isObjectIdOrHexString(value)) {
+      return Promise.reject('Invalid subjectId');
+    }
+    return true;
+  }),
+  userValidation,
+  bodyValidation,
+  portalValidation,
   getMessages
 );
 

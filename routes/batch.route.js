@@ -10,6 +10,7 @@ const {
   updateBatch,
   changeBatchStatus,
   getBatchByUserId,
+  getBatchesByPortal,
 } = require('../controllers/batch.controller.js');
 
 // middlewares
@@ -49,6 +50,8 @@ router.post(
 router.get('/', userValidation, getBatches);
 
 router.get('/userId', userValidation, getBatchByUserId);
+
+router.get('/portal', userValidation, getBatchesByPortal);
 
 router.get(
   '/:id',

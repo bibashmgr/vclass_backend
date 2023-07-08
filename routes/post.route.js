@@ -15,6 +15,7 @@ const {
 const {
   bodyValidation,
   userValidation,
+  portalValidation,
 } = require('../middlewares/validation.middleware.js');
 
 // models
@@ -23,9 +24,15 @@ const postModel = require('../models/post.model.js');
 const router = express.Router();
 
 router.post(
-  '/create',
+  '/:batchId/:subjectId/create',
   userValidation,
-  check('subject').custom((value) => {
+  check('batchId').custom((value) => {
+    if (!mongoose.isObjectIdOrHexString(value)) {
+      return Promise.reject('Invalid batchId');
+    }
+    return true;
+  }),
+  check('subjectId').custom((value) => {
     if (!mongoose.isObjectIdOrHexString(value)) {
       return Promise.reject('Invalid subjectId');
     }
@@ -74,11 +81,18 @@ router.post(
     }
   }),
   bodyValidation,
+  portalValidation,
   createPost
 );
 
 router.get(
-  '/subject/:subjectId',
+  '/:batchId/:subjectId',
+  check('batchId').custom((value) => {
+    if (!mongoose.isObjectIdOrHexString(value)) {
+      return Promise.reject('Invalid batchId');
+    }
+    return true;
+  }),
   check('subjectId').custom((value) => {
     if (!mongoose.isObjectIdOrHexString(value)) {
       return Promise.reject('Invalid subjectId');
@@ -87,6 +101,7 @@ router.get(
   }),
   userValidation,
   bodyValidation,
+  portalValidation,
   getPosts
 );
 

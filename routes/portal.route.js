@@ -3,14 +3,13 @@ const mongoose = require('mongoose');
 const { check } = require('express-validator');
 
 // controllers
-const {} = require('../controllers/portal.controller.js');
+const { getPortalsByBatch } = require('../controllers/portal.controller.js');
 
 // middlewares
-const {
-  bodyValidation,
-  userValidation,
-} = require('../middlewares/validation.middleware.js');
+const { userValidation } = require('../middlewares/validation.middleware.js');
 
 const router = express.Router();
+
+router.get('/:batchId', userValidation, getPortalsByBatch);
 
 module.exports = router;

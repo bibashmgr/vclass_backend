@@ -5,58 +5,24 @@ const logger = require('../utils/logger.js');
 
 // models
 const messageModel = require('../models/message.model.js');
-const portalModel = require('../models/portal.model.js');
 
 const createMessage = async (req, res) => {
   try {
-    portalModel
-      .findOne({
-        subject: req.body.subject,
-        batch: req.user.batch,
-      })
-      .then((portal) => {
-        if (portal) {
-          new messageModel({
-            desc: req.body.desc,
-            portal: portal._id,
-            user: req.user._id,
-          })
-            .save()
-            .then(async (message) => {
-              const populatedMessage = await message.populate('user');
+    new messageModel({
+      desc: req.body.desc,
+      portal: req.portalId,
+      user: req.user._id,
+    })
+      .save()
+      .then(async (message) => {
+        const populatedMessage = await message.populate('user');
 
-              logger.info('Create Message');
-              return res.status(httpStatus.CREATED).json({
-                data: populatedMessage,
-                success: true,
-                message: 'Create Message',
-              });
-            });
-        } else {
-          new portalModel({
-            subject: req.body.subject,
-            batch: req.user.batch,
-          })
-            .save()
-            .then((newPortal) => {
-              new messageModel({
-                desc: req.body.desc,
-                portal: newPortal._id,
-                user: req.user._id,
-              })
-                .save()
-                .then(async (message) => {
-                  const populatedMessage = await message.populate('user');
-
-                  logger.info('Create Message');
-                  return res.status(httpStatus.CREATED).json({
-                    data: populatedMessage,
-                    success: true,
-                    message: 'Create Message',
-                  });
-                });
-            });
-        }
+        logger.info('Create Message');
+        return res.status(httpStatus.CREATED).json({
+          data: populatedMessage,
+          success: true,
+          message: 'Create Message',
+        });
       });
   } catch (error) {
     logger.error(error.message);
@@ -70,49 +36,18 @@ const createMessage = async (req, res) => {
 
 const getMessages = async (req, res) => {
   try {
-    portalModel
-      .findOne({
-        subject: req.params.subjectId,
-        batch: req.user.batch,
+    messageModel
+      .find({
+        portal: req.portalId,
       })
-      .then((portal) => {
-        if (portal) {
-          messageModel
-            .find({
-              portal: portal._id,
-            })
-            .populate('user')
-            .then((messages) => {
-              logger.info('Fetch messages');
-              return res.status(httpStatus.OK).json({
-                data: messages,
-                success: true,
-                message: 'Fetch messages',
-              });
-            });
-        } else {
-          new portalModel({
-            subject: req.params.subjectId,
-            batch: req.user.batch,
-          })
-            .save()
-            .then((newPortal) => {
-              messageModel
-                .find({
-                  subject: req.params.subjectId,
-                  portal: newPortal._id,
-                })
-                .populate('user')
-                .then((messages) => {
-                  logger.info('Fetch messages');
-                  return res.status(httpStatus.OK).json({
-                    data: messages,
-                    success: true,
-                    message: 'Fetch messages',
-                  });
-                });
-            });
-        }
+      .populate('user')
+      .then((messages) => {
+        logger.info('Fetch messages');
+        return res.status(httpStatus.OK).json({
+          data: messages,
+          success: true,
+          message: 'Fetch messages',
+        });
       });
   } catch (error) {
     logger.error(error.message);

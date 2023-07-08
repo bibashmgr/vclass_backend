@@ -7,27 +7,27 @@ const socketManager = (io) => {
 
     // portal
     socket.on('join-portal', async (data) => {
-      const { subjectId, userInfo } = data;
+      const { subjectId, batchId } = data;
 
-      socket.join(subjectId + userInfo.batch);
-      logger.info(`${socket.id} joined ${subjectId + userInfo.batch}`);
+      socket.join(subjectId + batchId);
+      logger.info(`${socket.id} joined ${subjectId + batchId}`);
     });
 
     socket.on('leave-portal', (data) => {
-      const { subjectId, userInfo } = data;
+      const { subjectId, batchId } = data;
 
-      socket.leave(subjectId + userInfo.batch);
-      logger.info(`${socket.id} left ${subjectId + userInfo.batch}`);
+      socket.leave(subjectId + batchId);
+      logger.info(`${socket.id} left ${subjectId + batchId}`);
     });
 
     // messages
     socket.on('send-message', (data) => {
-      const { subjectId, userInfo, messageInfo } = data;
+      const { subjectId, batchId, messageInfo } = data;
 
       socket.broadcast
-        .to(subjectId + userInfo.batch)
+        .to(subjectId + batchId)
         .emit('receive-message', { messageInfo });
-      logger.info(`${socket.id} sent message to ${subjectId + userInfo.batch}`);
+      logger.info(`${socket.id} sent message to ${subjectId + batchId}`);
     });
 
     socket.on('disconnect', () => {

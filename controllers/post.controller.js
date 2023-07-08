@@ -1,7 +1,6 @@
 const httpStatus = require('http-status');
 
 // models
-const portalModel = require('../models/portal.model.js');
 const postModel = require('../models/post.model.js');
 const fileModel = require('../models/file.model.js');
 
@@ -13,86 +12,37 @@ const GfsBucket = require('../helpers/gridfsManager.js');
 
 const createPost = async (req, res) => {
   try {
-    portalModel
-      .findOne({
-        subject: req.body.subject,
-        batch: req.user.batch,
-      })
-      .then((portal) => {
-        if (portal) {
-          new postModel({
-            portal: portal._id,
-            user: req.user._id,
-            category: req.body.category,
-            title: req.body.title,
-            desc: req.body.desc,
-            files: req.body.files,
-            assignmentRef: req.body.assignmentRef,
-          })
-            .save()
-            .then(async (post) => {
-              if (req.body.category === 'submission') {
-                postModel
-                  .findByIdAndUpdate(req.body.assignmentRef, {
-                    $push: {
-                      submittedBy: post._id,
-                    },
-                  })
-                  .then(() => {
-                    logger.info('Push postRef to assignment');
-                  });
-              }
-
-              const populatedPost = await post.populate(['user', 'files']);
-
-              logger.info('Create Post');
-              return res.status(httpStatus.CREATED).json({
-                data: populatedPost,
-                success: true,
-                message: 'Create Post',
-              });
-            });
-        } else {
-          new portalModel({
-            subject: req.body.subject,
-            batch: req.user.batch,
-          })
-            .save()
-            .then((newPortal) => {
-              new postModel({
-                portal: newPortal._id,
-                user: req.user._id,
-                category: req.body.category,
-                title: req.body.title,
-                desc: req.body.desc,
-                files: req.body.files,
-                assignmentRef: req.body.assignmentRef,
-              })
-                .save()
-                .then(async (post) => {
-                  if (req.body.category === 'submission') {
-                    postModel
-                      .findByIdAndUpdate(req.body.assignmentRef, {
-                        $push: {
-                          submittedBy: post._id,
-                        },
-                      })
-                      .then(() => {
-                        logger.info('Push postRef to assignment');
-                      });
-                  }
-
-                  const populatedPost = await post.populate(['user', 'files']);
-
-                  logger.info('Create Post');
-                  return res.status(httpStatus.CREATED).json({
-                    data: populatedPost,
-                    success: true,
-                    message: 'Create Post',
-                  });
-                });
+    new postModel({
+      portal: req.portalId,
+      user: req.user._id,
+      category: req.body.category,
+      title: req.body.title,
+      desc: req.body.desc,
+      files: req.body.files,
+      assignmentRef: req.body.assignmentRef,
+    })
+      .save()
+      .then(async (post) => {
+        if (req.body.category === 'submission') {
+          postModel
+            .findByIdAndUpdate(req.body.assignmentRef, {
+              $push: {
+                submittedBy: post._id,
+              },
+            })
+            .then(() => {
+              logger.info('Push postRef to assignment');
             });
         }
+
+        const populatedPost = await post.populate(['user', 'files']);
+
+        logger.info('Create Post');
+        return res.status(httpStatus.CREATED).json({
+          data: populatedPost,
+          success: true,
+          message: 'Create Post',
+        });
       });
   } catch (error) {
     logger.error(error.message);
@@ -106,48 +56,18 @@ const createPost = async (req, res) => {
 
 const getPosts = async (req, res) => {
   try {
-    portalModel
-      .findOne({
-        subject: req.params.subjectId,
-        batch: req.user.batch,
+    postModel
+      .find({
+        portal: req.portalId,
       })
-      .then((portal) => {
-        if (portal) {
-          postModel
-            .find({
-              portal: portal._id,
-            })
-            .populate(['user', 'files'])
-            .then((posts) => {
-              logger.info('Fetch posts');
-              return res.status(httpStatus.OK).json({
-                data: posts,
-                success: true,
-                message: 'Fetch posts',
-              });
-            });
-        } else {
-          new portalModel({
-            subject: req.params.subjectId,
-            batch: req.user.batch,
-          })
-            .save()
-            .then((newPortal) => {
-              postModel
-                .find({
-                  portal: newPortal._id,
-                })
-                .populate(['user', 'files'])
-                .then((posts) => {
-                  logger.info('Fetch posts');
-                  return res.status(httpStatus.OK).json({
-                    data: posts,
-                    success: true,
-                    message: 'Fetch posts',
-                  });
-                });
-            });
-        }
+      .populate(['user', 'files'])
+      .then((posts) => {
+        logger.info('Fetch posts');
+        return res.status(httpStatus.OK).json({
+          data: posts,
+          success: true,
+          message: 'Fetch posts',
+        });
       });
   } catch (error) {
     logger.error(error.message);
