@@ -7,7 +7,10 @@ const logger = require('../utils/logger.js');
 
 // config
 const config = require('../config/config.js');
+
+// models
 const userModel = require('../models/user.model.js');
+const portalModel = require('../models/portal.model.js');
 
 const customFormat = ({ msg }) => {
   return `${msg}`;
@@ -27,7 +30,7 @@ const bodyValidation = (req, res, next) => {
   }
 };
 
-const userValidation = (req, res, next) => {
+const userValidation = async (req, res, next) => {
   try {
     let token;
     if (
@@ -73,7 +76,41 @@ const userValidation = (req, res, next) => {
   }
 };
 
+const portalValidation = async (req, res, next) => {
+  try {
+    portalModel
+      .findOne({
+        batch: req.params.batchId,
+        subject: req.params.subjectId,
+      })
+      .then((portal) => {
+        if (portal) {
+          req.portalId = portal._id;
+          next();
+        } else {
+          new portalModel({
+            batch: req.params.batchId,
+            subject: req.params.subjectId,
+          })
+            .save()
+            .then((newPortal) => {
+              req.portalId = newPortal._id;
+              next();
+            });
+        }
+      });
+  } catch (error) {
+    logger.error(error.message);
+    return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+      data: null,
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 module.exports = {
   bodyValidation,
   userValidation,
+  portalValidation,
 };
