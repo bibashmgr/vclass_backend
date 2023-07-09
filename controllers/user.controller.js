@@ -3,21 +3,23 @@ const httpStatus = require('http-status');
 // models
 const userModel = require('../models/user.model.js');
 const batchModel = require('../models/batch.model.js');
-const facultyModel = require('../models/faculty.model.js');
 
 // utils
 const logger = require('../utils/logger.js');
 
 const getUsers = async (req, res) => {
   try {
-    userModel.find().then((users) => {
-      logger.info('Fetch users');
-      return res.status(httpStatus.OK).json({
-        data: users,
-        success: true,
-        message: 'Fetch users',
+    userModel
+      .find()
+      .populate('batch')
+      .then((users) => {
+        logger.info('Fetch users');
+        return res.status(httpStatus.OK).json({
+          data: users,
+          success: true,
+          message: 'Fetch users',
+        });
       });
-    });
   } catch (error) {
     logger.error(error.message);
     return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
@@ -30,23 +32,26 @@ const getUsers = async (req, res) => {
 
 const getUser = async (req, res) => {
   try {
-    userModel.findById(req.params.id).then((user) => {
-      if (user) {
-        logger.info('Fetch userInfo');
-        return res.status(httpStatus.OK).json({
-          data: user,
-          success: true,
-          message: 'Fetch userInfo',
-        });
-      } else {
-        logger.error('Failed to fetch userInfo');
-        return res.status(httpStatus.NOT_FOUND).json({
-          data: null,
-          success: false,
-          message: 'Failed to fetch userInfo',
-        });
-      }
-    });
+    userModel
+      .findById(req.params.id)
+      .populate('batch')
+      .then((user) => {
+        if (user) {
+          logger.info('Fetch userInfo');
+          return res.status(httpStatus.OK).json({
+            data: user,
+            success: true,
+            message: 'Fetch userInfo',
+          });
+        } else {
+          logger.error('Failed to fetch userInfo');
+          return res.status(httpStatus.NOT_FOUND).json({
+            data: null,
+            success: false,
+            message: 'Failed to fetch userInfo',
+          });
+        }
+      });
   } catch (error) {
     logger.error(error.message);
     return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({

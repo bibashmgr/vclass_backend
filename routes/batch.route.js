@@ -9,6 +9,8 @@ const {
   getBatch,
   updateBatch,
   changeBatchStatus,
+  getBatchByUserId,
+  getBatchesByPortal,
 } = require('../controllers/batch.controller.js');
 
 // middlewares
@@ -47,10 +49,19 @@ router.post(
 
 router.get('/', userValidation, getBatches);
 
+router.get('/userId', userValidation, getBatchByUserId);
+
+router.get('/portal', userValidation, getBatchesByPortal);
+
 router.get(
   '/:id',
   userValidation,
-  check('id').isMongoId().withMessage('Invalid batchId'),
+  check('id').custom((value) => {
+    if (!mongoose.isObjectIdOrHexString(value)) {
+      return Promise.reject('Invalid batchId');
+    }
+    return true;
+  }),
   bodyValidation,
   getBatch
 );
@@ -78,7 +89,12 @@ router.patch(
     .isInt({ min: 1, max: 10 })
     .withMessage('Invalid currentSemester')
     .trim(),
-  check('id').isMongoId().withMessage('Invalid batchId'),
+  check('id').custom((value) => {
+    if (!mongoose.isObjectIdOrHexString(value)) {
+      return Promise.reject('Invalid batchId');
+    }
+    return true;
+  }),
   bodyValidation,
   updateBatch
 );
@@ -86,7 +102,12 @@ router.patch(
 router.patch(
   '/status/:id',
   userValidation,
-  check('id').isMongoId().withMessage('Invalid batchId'),
+  check('id').custom((value) => {
+    if (!mongoose.isObjectIdOrHexString(value)) {
+      return Promise.reject('Invalid batchId');
+    }
+    return true;
+  }),
   bodyValidation,
   changeBatchStatus
 );

@@ -1,0 +1,117 @@
+{
+    "_id": "60beebc4-8f2f-4bb3-97d9-fe92fcbcb004",
+    "colName": "users",
+    "created": "2023-04-26T07:02:44.325Z",
+    "sortNum": 1250,
+    "folders": [
+        {
+            "_id": "6e28fba2-02af-4d71-af59-1803e064586b",
+            "name": "Single User",
+            "containerId": "",
+            "created": "2023-04-26T07:05:04.917Z",
+            "sortNum": 10000
+        }
+    ],
+    "requests": [
+        {
+            "_id": "2be1109a-3537-42f0-aea8-9fd84f31a337",
+            "colId": "60beebc4-8f2f-4bb3-97d9-fe92fcbcb004",
+            "containerId": "6e28fba2-02af-4d71-af59-1803e064586b",
+            "name": "Get Profile",
+            "url": "{{BASE_URL}}/auth/login/success",
+            "method": "GET",
+            "sortNum": 10000,
+            "created": "2023-04-26T07:03:13.413Z",
+            "modified": "2023-04-26T07:06:20.862Z",
+            "headers": [],
+            "params": [],
+            "auth": {
+                "type": "bearer",
+                "bearer": "{{TOKEN}}"
+            },
+            "tests": []
+        },
+        {
+            "_id": "34dbc690-5f09-48e5-9944-ccbf26987e17",
+            "colId": "60beebc4-8f2f-4bb3-97d9-fe92fcbcb004",
+            "containerId": "",
+            "name": "Get Users",
+            "url": "{{BASE_URL}}/users",
+            "method": "GET",
+            "sortNum": 40000,
+            "created": "2023-04-26T07:04:28.046Z",
+            "modified": "2023-04-26T07:18:14.133Z",
+            "headers": [],
+            "params": [],
+            "auth": {
+                "type": "bearer",
+                "bearer": "{{TOKEN}}"
+            },
+            "tests": []
+        },
+        {
+            "_id": "d06763c8-64ee-4183-a079-56210f7c1792",
+            "colId": "60beebc4-8f2f-4bb3-97d9-fe92fcbcb004",
+            "containerId": "6e28fba2-02af-4d71-af59-1803e064586b",
+            "name": "Get UserInfo",
+            "url": "{{BASE_URL}}/users/{{USER_ID}}",
+            "method": "GET",
+            "sortNum": 20000,
+            "created": "2023-04-26T08:09:42.442Z",
+            "modified": "2023-04-26T08:10:10.427Z",
+            "headers": [],
+            "params": [],
+            "auth": {
+                "type": "bearer",
+                "bearer": "{{TOKEN}}"
+            },
+            "tests": []
+        },
+        {
+            "_id": "89cd62c5-c58c-463e-b520-21f1b9064996",
+            "colId": "60beebc4-8f2f-4bb3-97d9-fe92fcbcb004",
+            "containerId": "6e28fba2-02af-4d71-af59-1803e064586b",
+            "name": "Update UserInfo",
+            "url": "{{BASE_URL}}/users/{{USER_ID}}",
+            "method": "PATCH",
+            "sortNum": 30000,
+            "created": "2023-04-26T08:10:56.249Z",
+            "modified": "2023-04-26T08:16:31.281Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"role\": \"admin\",\n  \"college\": \"gces\",\n  \"batchId\": \"asdcsdc\"\n}",
+                "form": []
+            },
+            "auth": {
+                "type": "bearer",
+                "bearer": "{{TOKEN}}"
+            },
+            "tests": []
+        },
+        {
+            "_id": "7c92c96a-4232-4501-b343-d5713e80a312",
+            "colId": "60beebc4-8f2f-4bb3-97d9-fe92fcbcb004",
+            "containerId": "6e28fba2-02af-4d71-af59-1803e064586b",
+            "name": "Changes User Status",
+            "url": "{{BASE_URL}}/users/status/{{USER_ID}}",
+            "method": "PATCH",
+            "sortNum": 40000,
+            "created": "2023-04-26T08:17:03.969Z",
+            "modified": "2023-04-26T08:17:36.060Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{}",
+                "form": []
+            },
+            "auth": {
+                "type": "bearer",
+                "bearer": "{{TOKEN}}"
+            },
+            "tests": []
+        }
+    ]
+}

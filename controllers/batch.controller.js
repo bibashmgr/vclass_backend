@@ -3,6 +3,7 @@ const httpStatus = require('http-status');
 // models
 const batchModel = require('../models/batch.model.js');
 const facultyModel = require('../models/faculty.model.js');
+const portalModel = require('../models/portal.model.js');
 
 // utils
 const logger = require('../utils/logger.js');
@@ -210,10 +211,98 @@ const changeBatchStatus = async (req, res) => {
   }
 };
 
+const getBatchByUserId = async (req, res) => {
+  try {
+    batchModel
+      .findById(req.user.batch)
+      .populate({
+        path: 'faculty',
+        populate: {
+          path: 'semesters',
+          model: 'subjects',
+        },
+      })
+      .then(async (batch) => {
+        if (batch) {
+          let newBatch = batch;
+          let newSemesters = [];
+
+          await newBatch.faculty.semesters.map((semester, index) => {
+            if (index + 1 <= batch.currentSemester) {
+              newSemesters.push(semester);
+            }
+          });
+
+          newBatch.faculty.semesters = newSemesters;
+
+          logger.info('Fetch batchInfo');
+          return res.status(httpStatus.OK).json({
+            data: newBatch,
+            success: true,
+            message: 'Fetch batchInfo',
+          });
+        } else {
+          logger.warn('Failed to fetch batchInfo');
+          return res.status(httpStatus.NOT_FOUND).json({
+            data: null,
+            success: false,
+            message: 'Failed to fetch batchInfo',
+          });
+        }
+      });
+  } catch (error) {
+    logger.error(error.message);
+    return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+      data: null,
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+const getBatchesByPortal = async (req, res) => {
+  try {
+    let batches = [];
+
+    portalModel
+      .find({ teacher: req.user._id })
+      .populate({
+        path: 'batch',
+        populate: { path: 'faculty' },
+      })
+      .then((portals) => {
+        portals.map((portal) => {
+          let isBatchExist = batches.find(
+            (batch) => batch._id === portal.batch._id
+          );
+
+          if (!isBatchExist) {
+            batches.push(portal.batch);
+          }
+        });
+
+        return res.status(httpStatus.OK).json({
+          data: batches,
+          success: true,
+          message: 'Fetch Batches',
+        });
+      });
+  } catch (error) {
+    logger.error(error.message);
+    return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+      data: null,
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 module.exports = {
   createBatch,
   getBatches,
   getBatch,
   updateBatch,
   changeBatchStatus,
+  getBatchByUserId,
+  getBatchesByPortal,
 };

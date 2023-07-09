@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const passport = require('passport');
+const { Server } = require('socket.io');
 
 // routes
 const homeRoutes = require('./routes/home.route.js');
@@ -12,6 +13,10 @@ const subjectRoutes = require('./routes/subject.route.js');
 const facultyRoutes = require('./routes/faculty.route.js');
 const batchRoutes = require('./routes/batch.route.js');
 const userRoutes = require('./routes/user.route.js');
+const portalRoutes = require('./routes/portal.route.js');
+const messageRoutes = require('./routes/message.route.js');
+const fileRoutes = require('./routes/file.route.js');
+const postRoutes = require('./routes/post.route.js');
 
 // config
 const config = require('./config/config.js');
@@ -21,6 +26,12 @@ const logger = require('./utils/logger.js');
 
 // middlewares
 const morganMiddleware = require('./middlewares/morgan.middleware.js');
+
+// services
+const socketManager = require('./services/socket.service.js');
+
+// helpers
+const GfsBucket = require('./helpers/gridfsManager.js');
 
 const app = express();
 
@@ -69,8 +80,20 @@ app.use('/subjects', subjectRoutes);
 app.use('/faculties', facultyRoutes);
 app.use('/batches', batchRoutes);
 app.use('/users', userRoutes);
+app.use('/portals', portalRoutes);
+app.use('/messages', messageRoutes);
+app.use('/files', fileRoutes);
+app.use('/posts', postRoutes);
 
 const httpServer = http.createServer(app);
+
+const io = new Server(httpServer, {
+  cors: {
+    origin: process.env.CLIENT_BASE_URL,
+  },
+});
+
+socketManager(io);
 
 mongoose.set('strictQuery', true);
 mongoose.connect(
@@ -84,6 +107,7 @@ mongoose.connect(
       logger.error(error.message);
     } else {
       logger.info('Database Connected');
+      new GfsBucket();
       httpServer.listen(config.portNumber, (err) => {
         if (err) {
           logger.error(err.message);

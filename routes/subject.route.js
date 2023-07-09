@@ -1,4 +1,5 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const { check } = require('express-validator');
 
 // controllers
@@ -32,7 +33,12 @@ router.get('/', userValidation, getSubjects);
 router.get(
   '/:id',
   userValidation,
-  check('id').isMongoId().withMessage('Invalid subjectId'),
+  check('id').custom((value) => {
+    if (!mongoose.isObjectIdOrHexString(value)) {
+      return Promise.reject('Invalid subjectId');
+    }
+    return true;
+  }),
   bodyValidation,
   getSubject
 );
@@ -42,7 +48,12 @@ router.patch(
   userValidation,
   check('name').not().isEmpty().withMessage('Name is empty').trim(),
   check('codeName').not().isEmpty().withMessage('CodeName is empty').trim(),
-  check('id').isMongoId().withMessage('Invalid subjectId'),
+  check('id').custom((value) => {
+    if (!mongoose.isObjectIdOrHexString(value)) {
+      return Promise.reject('Invalid subjectId');
+    }
+    return true;
+  }),
   bodyValidation,
   updateSubject
 );
@@ -50,7 +61,12 @@ router.patch(
 router.patch(
   '/status/:id',
   userValidation,
-  check('id').isMongoId().withMessage('Invalid subjectId'),
+  check('id').custom((value) => {
+    if (!mongoose.isObjectIdOrHexString(value)) {
+      return Promise.reject('Invalid subjectId');
+    }
+    return true;
+  }),
   bodyValidation,
   changeSubjectStatus
 );

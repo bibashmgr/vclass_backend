@@ -29,8 +29,9 @@ const userSchema = new mongoose.Schema(
       default: '',
     },
     batch: {
-      type: String,
-      default: '',
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'batches',
+      default: null,
     },
     isHidden: {
       type: Boolean,

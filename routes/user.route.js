@@ -1,4 +1,5 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const { check } = require('express-validator');
 
 // controllers
@@ -22,7 +23,12 @@ router.get('/', userValidation, getUsers);
 router.get(
   '/:id',
   userValidation,
-  check('id').isMongoId().withMessage('Invalid userId'),
+  check('id').custom((value) => {
+    if (!mongoose.isObjectIdOrHexString(value)) {
+      return Promise.reject('Invalid userId');
+    }
+    return true;
+  }),
   bodyValidation,
   getUser
 );
@@ -31,7 +37,12 @@ router.patch(
   '/:id',
   userValidation,
   check('role').not().isEmpty().withMessage('Role is empty').trim(),
-  check('id').isMongoId().withMessage('Invalid userId'),
+  check('id').custom((value) => {
+    if (!mongoose.isObjectIdOrHexString(value)) {
+      return Promise.reject('Invalid userId');
+    }
+    return true;
+  }),
   bodyValidation,
   updateUser
 );
@@ -39,7 +50,12 @@ router.patch(
 router.patch(
   '/status/:id',
   userValidation,
-  check('id').isMongoId().withMessage('Invalid userId'),
+  check('id').custom((value) => {
+    if (!mongoose.isObjectIdOrHexString(value)) {
+      return Promise.reject('Invalid userId');
+    }
+    return true;
+  }),
   bodyValidation,
   changeUserStatus
 );

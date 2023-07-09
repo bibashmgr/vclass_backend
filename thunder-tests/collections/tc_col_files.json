@@ -1,0 +1,60 @@
+{
+    "_id": "071e63e6-e877-4add-8404-92c912476944",
+    "colName": "files",
+    "created": "2023-06-28T07:53:57.321Z",
+    "sortNum": 40000,
+    "folders": [],
+    "requests": [
+        {
+            "_id": "a06926b3-654e-4a0b-a44c-757c484317eb",
+            "colId": "071e63e6-e877-4add-8404-92c912476944",
+            "containerId": "",
+            "name": "Create File",
+            "url": "{{BASE_URL}}/files/create",
+            "method": "POST",
+            "sortNum": 10000,
+            "created": "2023-06-28T07:54:40.288Z",
+            "modified": "2023-06-28T07:56:52.385Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "formdata",
+                "raw": "",
+                "form": [],
+                "files": [
+                    {
+                        "name": "files",
+                        "value": "e:\\Downloads\\file (1).jpg"
+                    },
+                    {
+                        "name": "files",
+                        "value": "e:\\Downloads\\file (3).jpg"
+                    }
+                ]
+            },
+            "auth": {
+                "type": "bearer",
+                "bearer": "{{TOKEN}}"
+            },
+            "tests": []
+        },
+        {
+            "_id": "09d87298-6331-49da-a160-0083b9e633ba",
+            "colId": "071e63e6-e877-4add-8404-92c912476944",
+            "containerId": "",
+            "name": "Delete File",
+            "url": "{{BASE_URL}}/files/6f4ac7b7bf3de1101639a604825c97a0.jpg/delete",
+            "method": "DELETE",
+            "sortNum": 20000,
+            "created": "2023-06-28T07:55:28.542Z",
+            "modified": "2023-06-29T03:09:39.881Z",
+            "headers": [],
+            "params": [],
+            "auth": {
+                "type": "bearer",
+                "bearer": "{{TOKEN}}"
+            },
+            "tests": []
+        }
+    ]
+}
