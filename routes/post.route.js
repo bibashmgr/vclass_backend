@@ -38,16 +38,6 @@ router.post(
     }
     return true;
   }),
-  check('title').not().isEmpty().withMessage('Title is empty').trim(),
-  check('files')
-    .isArray()
-    .withMessage('Files must be Array')
-    .custom((value) => {
-      if (value?.length === 0) {
-        return Promise.reject('Files are required');
-      }
-      return true;
-    }),
   check('category').custom(async (value, { req }) => {
     let options = ['material', 'submission', 'assignment'];
     if (options.includes(value)) {
@@ -121,16 +111,6 @@ router.get(
 router.patch(
   '/:id',
   userValidation,
-  check('title').not().isEmpty().withMessage('Title is empty').trim(),
-  check('files')
-    .isArray()
-    .withMessage('Files must be Array')
-    .custom((value) => {
-      if (value?.length === 0) {
-        return Promise.reject('Files are required');
-      }
-      return true;
-    }),
   check('id').custom((value) => {
     if (!mongoose.isObjectIdOrHexString(value)) {
       return Promise.reject('Invalid postId');

@@ -59,6 +59,9 @@ const getPosts = async (req, res) => {
     postModel
       .find({
         portal: req.portalId,
+        category: {
+          $in: ['material', 'assignment'],
+        },
       })
       .populate(['user', 'files'])
       .then((posts) => {
@@ -83,7 +86,14 @@ const getPost = async (req, res) => {
   try {
     postModel
       .findById(req.params.id)
-      .populate(['user', 'files'])
+      .populate([
+        'user',
+        'files',
+        {
+          path: 'submittedBy',
+          populate: ['user', 'files'],
+        },
+      ])
       .then((post) => {
         if (post) {
           logger.info('Fetch postInfo');
@@ -198,4 +208,10 @@ const deletePost = async (req, res) => {
   }
 };
 
-module.exports = { createPost, getPosts, getPost, updatePost, deletePost };
+module.exports = {
+  createPost,
+  getPosts,
+  getPost,
+  updatePost,
+  deletePost,
+};

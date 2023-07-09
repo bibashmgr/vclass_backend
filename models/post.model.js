@@ -19,7 +19,7 @@ const postSchema = new mongoose.Schema(
     },
     title: {
       type: String,
-      required: true,
+      default: '',
     },
     desc: {
       type: String,
@@ -38,7 +38,7 @@ const postSchema = new mongoose.Schema(
       type: [
         {
           type: mongoose.Schema.Types.ObjectId,
-          ref: 'users',
+          ref: 'posts',
         },
       ],
       default: [],
