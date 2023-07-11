@@ -20,6 +20,7 @@ const createPost = async (req, res) => {
       desc: req.body.desc,
       files: req.body.files,
       assignmentRef: req.body.assignmentRef,
+      dueDate: req.body.dueDate,
     })
       .save()
       .then(async (post) => {
@@ -130,6 +131,7 @@ const updatePost = async (req, res) => {
           title: req.body.title,
           desc: req.body.desc,
           files: req.body.files,
+          dueDate: req.body.dueDate,
         },
         { new: true }
       )

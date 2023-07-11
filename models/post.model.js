@@ -48,6 +48,10 @@ const postSchema = new mongoose.Schema(
       ref: 'posts',
       default: null,
     },
+    dueDate: {
+      type: Date,
+      default: null,
+    },
   },
   {
     timestamps: true,
