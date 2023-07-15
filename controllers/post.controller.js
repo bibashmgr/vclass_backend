@@ -239,6 +239,7 @@ const getAllStats = async (req, res) => {
       posts.map((post) => {
         let mappedPost = {
           title: post.title,
+          credit: post.credit,
           status: '',
         };
 
