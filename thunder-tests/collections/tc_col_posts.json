@@ -18,11 +18,11 @@
             "colId": "9215df24-c14e-4e28-b658-55807215757b",
             "containerId": "",
             "name": "Get All Posts",
-            "url": "{{BASE_URL}}/posts/subject/6451d4efb2162abf5f4fdd14",
+            "url": "{{BASE_URL}}/posts/6467a186bcc5918859d271c5/6451d4efb2162abf5f4fdd14",
             "method": "GET",
             "sortNum": 10000,
             "created": "2023-06-28T04:46:46.160Z",
-            "modified": "2023-06-29T14:06:08.954Z",
+            "modified": "2023-07-15T03:33:52.267Z",
             "headers": [],
             "params": [],
             "auth": {
@@ -59,11 +59,11 @@
             "colId": "9215df24-c14e-4e28-b658-55807215757b",
             "containerId": "26dbb690-069f-4058-94ef-da90e8ed412d",
             "name": "Get Post",
-            "url": "{{BASE_URL}}/posts/649d9871354479994071db3d",
+            "url": "{{BASE_URL}}/posts/64b237fdf70822c9a15d6784",
             "method": "GET",
             "sortNum": 30000,
             "created": "2023-06-29T14:04:44.293Z",
-            "modified": "2023-06-29T14:43:43.737Z",
+            "modified": "2023-07-15T06:27:14.059Z",
             "headers": [],
             "params": [],
             "auth": {
@@ -107,6 +107,42 @@
                 "raw": "{\n  \"title\": \"Test 1\",\n  \"desc\": \"This is for testing purpose.\",\n  \"files\": [\n    \"649bc41d350fb137b62c818e\"\n  ]\n}",
                 "form": []
             },
+            "auth": {
+                "type": "bearer",
+                "bearer": "{{TOKEN}}"
+            },
+            "tests": []
+        },
+        {
+            "_id": "ec5bd3d4-0785-4011-9225-2f53b63c7cff",
+            "colId": "9215df24-c14e-4e28-b658-55807215757b",
+            "containerId": "",
+            "name": "Get All Stats",
+            "url": "{{BASE_URL}}/posts/6467a186bcc5918859d271c5/6451d4efb2162abf5f4fdd14/stats",
+            "method": "GET",
+            "sortNum": 50000,
+            "created": "2023-07-15T03:31:44.674Z",
+            "modified": "2023-07-15T03:37:44.521Z",
+            "headers": [],
+            "params": [],
+            "auth": {
+                "type": "bearer",
+                "bearer": "{{TOKEN}}"
+            },
+            "tests": []
+        },
+        {
+            "_id": "89996087-74b5-4c80-8ea4-f11c5eca18fe",
+            "colId": "9215df24-c14e-4e28-b658-55807215757b",
+            "containerId": "26dbb690-069f-4058-94ef-da90e8ed412d",
+            "name": "Get Post Stats",
+            "url": "{{BASE_URL}}/posts/64b237fdf70822c9a15d6784/stats",
+            "method": "GET",
+            "sortNum": 35000,
+            "created": "2023-07-15T06:27:21.163Z",
+            "modified": "2023-07-15T06:27:33.957Z",
+            "headers": [],
+            "params": [],
             "auth": {
                 "type": "bearer",
                 "bearer": "{{TOKEN}}"

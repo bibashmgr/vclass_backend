@@ -52,6 +52,10 @@ const postSchema = new mongoose.Schema(
       type: Date,
       default: null,
     },
+    credit: {
+      type: Number,
+      default: null,
+    },
   },
   {
     timestamps: true,
