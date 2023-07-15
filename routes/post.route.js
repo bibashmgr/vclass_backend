@@ -9,6 +9,8 @@ const {
   getPost,
   updatePost,
   deletePost,
+  getAllStats,
+  getSingleStats,
 } = require('../controllers/post.controller.js');
 
 // middlewares
@@ -40,6 +42,7 @@ router.post(
   }),
   check('category').custom(async (value, { req }) => {
     let options = ['material', 'submission', 'assignment'];
+
     if (options.includes(value)) {
       if (value === 'submission') {
         if (mongoose.isObjectIdOrHexString(req.body.assignmentRef)) {
@@ -48,6 +51,8 @@ router.post(
 
             if (post) {
               if (post.category === 'assignment') {
+                req.body.dueDate = null;
+                req.body.credit = null;
                 return true;
               } else {
                 return Promise.reject('Invalid AssignmentRef');
@@ -58,12 +63,34 @@ router.post(
           } catch (error) {
             return Promise.reject(error);
           }
-        }
-        {
+        } else {
           return Promise.reject('Invalid AssignmentRef');
+        }
+      } else if (value === 'assignment') {
+        let isDateValid = !isNaN(Date.parse(req.body.dueDate));
+
+        if (isDateValid) {
+          if (!isNaN(req.body.credit)) {
+            let dueDate = new Date(req.body.dueDate);
+            let currentDate = new Date(Date.now());
+
+            if (dueDate.getTime() > currentDate.getTime()) {
+              req.body.assignmentRef = null;
+              return true;
+            } else {
+              return Promise.reject('dueDate cannot be earlier than today');
+            }
+          } else {
+            return Promise.reject('Invalid credit');
+          }
+        } else {
+          return Promise.reject('Invalid dueDate');
         }
       } else {
         req.body.assignmentRef = null;
+        req.body.dueDate = null;
+        req.body.credit = null;
+
         return true;
       }
     } else {
@@ -76,7 +103,21 @@ router.post(
 );
 
 router.get(
+  '/:id/stats',
+  userValidation,
+  check('id').custom((value) => {
+    if (!mongoose.isObjectIdOrHexString(value)) {
+      return Promise.reject('Invalid postId');
+    }
+    return true;
+  }),
+  bodyValidation,
+  getSingleStats
+);
+
+router.get(
   '/:batchId/:subjectId',
+  userValidation,
   check('batchId').custom((value) => {
     if (!mongoose.isObjectIdOrHexString(value)) {
       return Promise.reject('Invalid batchId');
@@ -89,10 +130,29 @@ router.get(
     }
     return true;
   }),
-  userValidation,
   bodyValidation,
   portalValidation,
   getPosts
+);
+
+router.get(
+  '/:batchId/:subjectId/stats',
+  userValidation,
+  check('batchId').custom((value) => {
+    if (!mongoose.isObjectIdOrHexString(value)) {
+      return Promise.reject('Invalid batchId');
+    }
+    return true;
+  }),
+  check('subjectId').custom((value) => {
+    if (!mongoose.isObjectIdOrHexString(value)) {
+      return Promise.reject('Invalid subjectId');
+    }
+    return true;
+  }),
+  bodyValidation,
+  portalValidation,
+  getAllStats
 );
 
 router.get(

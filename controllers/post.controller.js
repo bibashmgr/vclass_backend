@@ -1,6 +1,7 @@
 const httpStatus = require('http-status');
 
 // models
+const userModel = require('../models/user.model.js');
 const postModel = require('../models/post.model.js');
 const fileModel = require('../models/file.model.js');
 
@@ -20,6 +21,8 @@ const createPost = async (req, res) => {
       desc: req.body.desc,
       files: req.body.files,
       assignmentRef: req.body.assignmentRef,
+      dueDate: req.body.dueDate,
+      credit: req.body.credit,
     })
       .save()
       .then(async (post) => {
@@ -130,6 +133,7 @@ const updatePost = async (req, res) => {
           title: req.body.title,
           desc: req.body.desc,
           files: req.body.files,
+          dueDate: req.body.dueDate,
         },
         { new: true }
       )
@@ -208,10 +212,145 @@ const deletePost = async (req, res) => {
   }
 };
 
+const getAllStats = async (req, res) => {
+  try {
+    let results = [];
+
+    const users = await userModel.find({
+      batch: req.params.batchId,
+      role: 'student',
+    });
+
+    const posts = await postModel
+      .find({
+        portal: req.portalId,
+        category: 'assignment',
+      })
+      .populate(['submittedBy']);
+
+    users.map((user) => {
+      let stats = {
+        done: 0,
+        late: 0,
+        missing: 0,
+      };
+      let mappedPosts = [];
+
+      posts.map((post) => {
+        let mappedPost = {
+          title: post.title,
+          credit: post.credit,
+          status: '',
+        };
+
+        let isSubmitted = post.submittedBy.find(
+          (subPost) => subPost.user.toString() === user._id.toString()
+        );
+
+        if (isSubmitted) {
+          let submittedDate = new Date(isSubmitted.createdAt).getTime();
+          let dueDate = new Date(post.dueDate).getTime();
+
+          if (submittedDate <= dueDate) {
+            stats.done += 1;
+            mappedPost.status = 'done';
+          } else {
+            stats.late += 1;
+            mappedPost.status = 'late';
+          }
+        } else {
+          stats.missing += 1;
+          mappedPost.status = 'missing';
+        }
+
+        mappedPosts.push(mappedPost);
+      });
+
+      results.push({
+        user: {
+          name: user.name,
+          email: user.email,
+        },
+        posts: mappedPosts,
+        stats: stats,
+      });
+    });
+
+    return res.status(httpStatus.OK).json({
+      data: results,
+      success: true,
+      message: 'Fetch all stats',
+    });
+  } catch (error) {
+    logger.error(error.message);
+    return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+      data: null,
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+const getSingleStats = async (req, res) => {
+  try {
+    let results = [];
+
+    const post = await postModel
+      .findById(req.params.id)
+      .populate(['portal', 'submittedBy']);
+
+    const users = await userModel.find({
+      batch: post.portal.batch,
+      role: 'student',
+    });
+
+    users.map((user) => {
+      let status = '';
+      let isSubmitted = post.submittedBy.find(
+        (subPost) => subPost.user.toString() === user._id.toString()
+      );
+
+      if (isSubmitted) {
+        let submittedDate = new Date(isSubmitted.createdAt).getTime();
+        let dueDate = new Date(post.dueDate).getTime();
+
+        if (submittedDate <= dueDate) {
+          status = 'done';
+        } else {
+          status = 'late';
+        }
+      } else {
+        status = 'missing';
+      }
+
+      results.push({
+        name: user.name,
+        email: user.email,
+        status: status,
+      });
+    });
+
+    return res.status(httpStatus.OK).json({
+      data: results,
+      success: true,
+      message: 'Fetch all stats',
+    });
+  } catch (error) {
+    logger.error(error.message);
+    return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+      data: null,
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 module.exports = {
   createPost,
   getPosts,
   getPost,
   updatePost,
   deletePost,
+  getAllStats,
+  getSingleStats,
 };
