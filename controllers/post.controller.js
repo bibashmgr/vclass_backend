@@ -276,6 +276,7 @@ const getAllStats = async (req, res) => {
       });
     });
 
+    logger.info('Fetch all stats');
     return res.status(httpStatus.OK).json({
       data: results,
       success: true,
@@ -330,10 +331,11 @@ const getSingleStats = async (req, res) => {
       });
     });
 
+    logger.info('Fetch userStats');
     return res.status(httpStatus.OK).json({
       data: results,
       success: true,
-      message: 'Fetch all stats',
+      message: 'Fetch userStats',
     });
   } catch (error) {
     logger.error(error.message);

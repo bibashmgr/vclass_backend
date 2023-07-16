@@ -17,6 +17,14 @@ const portalSchema = new mongoose.Schema(
       ref: 'users',
       default: null,
     },
+    activeDates: {
+      type: [
+        {
+          type: Date,
+        },
+      ],
+      default: [],
+    },
   },
   {
     timestamps: true,
