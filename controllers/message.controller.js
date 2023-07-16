@@ -10,7 +10,7 @@ const createMessage = async (req, res) => {
   try {
     new messageModel({
       desc: req.body.desc,
-      portal: req.portalId,
+      portal: req.portal._id,
       user: req.user._id,
     })
       .save()
@@ -38,7 +38,7 @@ const getMessages = async (req, res) => {
   try {
     messageModel
       .find({
-        portal: req.portalId,
+        portal: req.portal._id,
       })
       .populate('user')
       .then((messages) => {
