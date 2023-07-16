@@ -17,6 +17,7 @@ const portalRoutes = require('./routes/portal.route.js');
 const messageRoutes = require('./routes/message.route.js');
 const fileRoutes = require('./routes/file.route.js');
 const postRoutes = require('./routes/post.route.js');
+const attendanceRoutes = require('./routes/attendance.route.js');
 
 // config
 const config = require('./config/config.js');
@@ -84,6 +85,7 @@ app.use('/portals', portalRoutes);
 app.use('/messages', messageRoutes);
 app.use('/files', fileRoutes);
 app.use('/posts', postRoutes);
+app.use('/attendances', attendanceRoutes);
 
 const httpServer = http.createServer(app);
 
