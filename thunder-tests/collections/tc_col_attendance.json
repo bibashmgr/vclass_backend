@@ -28,6 +28,52 @@
                 "bearer": "{{TOKEN}}"
             },
             "tests": []
+        },
+        {
+            "_id": "b117df02-1e4e-4085-991b-d441e2f8c3be",
+            "colId": "f146f597-d225-4b26-92e4-c64612399294",
+            "containerId": "",
+            "name": "Mark All Present",
+            "url": "{{BASE_URL}}/attendances/6467a186bcc5918859d271c5/6451d4efb2162abf5f4fdd14/present",
+            "method": "POST",
+            "sortNum": 20000,
+            "created": "2023-07-16T17:27:48.537Z",
+            "modified": "2023-07-16T17:53:04.194Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"date\": \"2023-07-16\"\n}",
+                "form": []
+            },
+            "auth": {
+                "type": "bearer",
+                "bearer": "{{TOKEN}}"
+            },
+            "tests": []
+        },
+        {
+            "_id": "ccdf1cb3-4893-4d50-b692-6b7e1a5a60d6",
+            "colId": "f146f597-d225-4b26-92e4-c64612399294",
+            "containerId": "",
+            "name": "Mark All Absent",
+            "url": "{{BASE_URL}}/attendances/6467a186bcc5918859d271c5/6451d4efb2162abf5f4fdd14/absent",
+            "method": "POST",
+            "sortNum": 30000,
+            "created": "2023-07-16T17:56:01.256Z",
+            "modified": "2023-07-16T17:56:29.753Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"date\": \"2023-07-17\"\n}",
+                "form": []
+            },
+            "auth": {
+                "type": "bearer",
+                "bearer": "{{TOKEN}}"
+            },
+            "tests": []
         }
     ]
 }
