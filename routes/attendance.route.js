@@ -4,9 +4,9 @@ const { check } = require('express-validator');
 
 // controllers
 const {
+  markStudents,
   getAttendanceByDate,
-  markAllPresent,
-  markAllAbsent,
+  getAttendanceByUser,
 } = require('../controllers/attendance.controller.js');
 
 // middlewares
@@ -19,7 +19,7 @@ const {
 const router = express.Router();
 
 router.post(
-  '/:batchId/:subjectId/present',
+  '/:batchId/:subjectId',
   userValidation,
   check('batchId').custom((value) => {
     if (!mongoose.isObjectIdOrHexString(value)) {
@@ -34,30 +34,10 @@ router.post(
     return true;
   }),
   check('date').isDate().withMessage('Invalid query'),
+  check('students').isArray().withMessage('Students must be Array'),
   bodyValidation,
   portalValidation,
-  markAllPresent
-);
-
-router.post(
-  '/:batchId/:subjectId/absent',
-  userValidation,
-  check('batchId').custom((value) => {
-    if (!mongoose.isObjectIdOrHexString(value)) {
-      return Promise.reject('Invalid batchId');
-    }
-    return true;
-  }),
-  check('subjectId').custom((value) => {
-    if (!mongoose.isObjectIdOrHexString(value)) {
-      return Promise.reject('Invalid subjectId');
-    }
-    return true;
-  }),
-  check('date').isDate().withMessage('Invalid query'),
-  bodyValidation,
-  portalValidation,
-  markAllAbsent
+  markStudents
 );
 
 router.get(
@@ -77,7 +57,34 @@ router.get(
   }),
   check('date').isDate().withMessage('Invalid query'),
   bodyValidation,
+  portalValidation,
   getAttendanceByDate
+);
+
+router.get(
+  '/:batchId/:subjectId/:userId',
+  userValidation,
+  check('batchId').custom((value) => {
+    if (!mongoose.isObjectIdOrHexString(value)) {
+      return Promise.reject('Invalid batchId');
+    }
+    return true;
+  }),
+  check('subjectId').custom((value) => {
+    if (!mongoose.isObjectIdOrHexString(value)) {
+      return Promise.reject('Invalid subjectId');
+    }
+    return true;
+  }),
+  check('userId').custom((value) => {
+    if (!mongoose.isObjectIdOrHexString(value)) {
+      return Promise.reject('Invalid userId');
+    }
+    return true;
+  }),
+  bodyValidation,
+  portalValidation,
+  getAttendanceByUser
 );
 
 module.exports = router;

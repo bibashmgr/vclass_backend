@@ -5,33 +5,17 @@ const logger = require('../utils/logger.js');
 
 // models
 const userModel = require('../models/user.model.js');
-const attendanceModel = require('../models/attendance.model.js');
 const portalModel = require('../models/portal.model.js');
+const attendanceModel = require('../models/attendance.model.js');
 
-// @routes: /attendances/
-// @method: post
-// @body: [batchId, subjectId, date, students]
 const markStudents = async (req, res) => {
   try {
-  } catch (error) {
-    logger.error(error.message);
-    return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
-      data: null,
-      success: false,
-      message: error.message,
-    });
-  }
-};
-
-const markAllPresent = async (req, res) => {
-  try {
-    const students = await userModel.find({ batch: req.params.batchId });
     if (req.portal.activeDates.length === 0) {
       let attendanceSchemas = [];
-      for (let i = 0; i < students.length; i++) {
+      for (let i = 0; i < req.body.students.length; i++) {
         attendanceSchemas.push({
           portal: req.portal._id,
-          user: students[i]._id,
+          user: req.body.students[i],
           activeDates: [req.body.date],
         });
       }
@@ -43,11 +27,11 @@ const markAllPresent = async (req, res) => {
         },
       });
 
-      logger.info('Mark All Present');
+      logger.info('Attendance Done');
       return res.status(httpStatus.OK).json({
         data: null,
         success: true,
-        message: 'Mark All Present',
+        message: 'Attendance Done',
       });
     } else {
       let dateY = new Date(req.body.date).getTime();
@@ -63,12 +47,12 @@ const markAllPresent = async (req, res) => {
         logger.info('Attendance already taken');
         return res.status(httpStatus.OK).json({
           data: null,
-          success: true,
+          success: false,
           message: 'Attendance already taken',
         });
       } else {
         await attendanceModel.updateMany(
-          { portal: req.portal._id },
+          { portal: req.portal._id, user: { $in: req.body.students } },
           {
             $push: {
               activeDates: req.body.date,
@@ -81,11 +65,11 @@ const markAllPresent = async (req, res) => {
           },
         });
 
-        logger.info('Mark All Present');
+        logger.info('Attendance Done');
         return res.status(httpStatus.OK).json({
           data: null,
           success: true,
-          message: 'Mark All Present',
+          message: 'Attendance Done',
         });
       }
     }
@@ -99,9 +83,16 @@ const markAllPresent = async (req, res) => {
   }
 };
 
-const markAllAbsent = async (req, res) => {
+const getAttendanceByDate = async (req, res) => {
   try {
-    let dateY = new Date(req.body.date).getTime();
+    const students = await userModel.find({ batch: req.params.batchId });
+    let results = {
+      totalPresents: 0,
+      totalAbsents: 0,
+      students: [],
+    };
+
+    let dateY = new Date(req.query.date).getTime();
     let isTaken = req.portal.activeDates.find((activeDate) => {
       let dateX = new Date(activeDate).getTime();
 
@@ -111,24 +102,40 @@ const markAllAbsent = async (req, res) => {
     });
 
     if (isTaken) {
-      logger.info('Attendance already taken');
-      return res.status(httpStatus.OK).json({
-        data: null,
-        success: true,
-        message: 'Attendance already taken',
-      });
-    } else {
-      await portalModel.findByIdAndUpdate(req.portal._id, {
-        $push: {
-          activeDates: req.body.date,
-        },
+      const attendances = await attendanceModel.find({
+        portal: req.portal._id,
+        activeDates: { $in: [new Date(req.query.date)] },
       });
 
-      logger.info('Mark All Absent');
+      students.map((student) => {
+        let isPresent = attendances.find(
+          (attendance) => attendance.user.toString() === student._id.toString()
+        );
+        if (isPresent) {
+          results.totalPresents += 1;
+        } else {
+          results.totalAbsents += 1;
+        }
+        results.students.push({
+          _id: student._id,
+          name: student.name,
+          email: student.email,
+          status: isPresent ? 'present' : 'absent',
+        });
+      });
+
+      logger.info('Fetch attendances');
+      return res.status(httpStatus.OK).json({
+        data: results,
+        success: true,
+        message: 'Fetch attendances',
+      });
+    } else {
+      logger.info('Attendance not taken');
       return res.status(httpStatus.OK).json({
         data: null,
-        success: true,
-        message: 'Mark All Absent',
+        success: false,
+        message: 'Attendance not taken',
       });
     }
   } catch (error) {
@@ -141,31 +148,17 @@ const markAllAbsent = async (req, res) => {
   }
 };
 
-// @routes: /attendances/:batchId/:subjectId/?date=
-// @method: get
-const getAttendanceByDate = async (req, res) => {
-  try {
-    return res.status(httpStatus.OK).json({
-      data: null,
-      success: true,
-      message: 'Fetch attendances',
-    });
-  } catch (error) {
-    logger.error(error.message);
-    return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
-      data: null,
-      success: false,
-      message: error.message,
-    });
-  }
-};
-
-// @routes: /attendances/:batchId/:subjectId/:userId
-// @method: get
 const getAttendanceByUser = async (req, res) => {
   try {
+    const attendances = await attendanceModel
+      .find({
+        portal: req.portal._id,
+        user: req.params.userId,
+      })
+      .populate(['portal', 'user']);
+    logger.info('Fetch attendances');
     return res.status(httpStatus.OK).json({
-      data: null,
+      data: attendances,
       success: true,
       message: 'Fetch attendances',
     });
@@ -180,8 +173,6 @@ const getAttendanceByUser = async (req, res) => {
 };
 
 module.exports = {
-  markAllPresent,
-  markAllAbsent,
   markStudents,
   getAttendanceByDate,
   getAttendanceByUser,
