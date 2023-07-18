@@ -151,7 +151,7 @@ const getAttendanceByDate = async (req, res) => {
 const getAttendanceByUser = async (req, res) => {
   try {
     const attendances = await attendanceModel
-      .find({
+      .findOne({
         portal: req.portal._id,
         user: req.params.userId,
       })
