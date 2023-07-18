@@ -8,6 +8,7 @@ const {
   getUser,
   updateUser,
   changeUserStatus,
+  getUsersByBatch,
 } = require('../controllers/user.controller.js');
 
 // middlewares
@@ -58,6 +59,19 @@ router.patch(
   }),
   bodyValidation,
   changeUserStatus
+);
+
+router.get(
+  '/batch/:batchId',
+  userValidation,
+  check('batchId').custom((value) => {
+    if (!mongoose.isObjectIdOrHexString(value)) {
+      return Promise.reject('Invalid batchId');
+    }
+    return true;
+  }),
+  bodyValidation,
+  getUsersByBatch
 );
 
 module.exports = router;
