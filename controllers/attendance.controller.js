@@ -150,18 +150,40 @@ const getAttendanceByDate = async (req, res) => {
 
 const getAttendanceByUser = async (req, res) => {
   try {
-    const attendances = await attendanceModel
+    const attendance = await attendanceModel
       .findOne({
         portal: req.portal._id,
         user: req.params.userId,
       })
       .populate(['portal', 'user']);
-    logger.info('Fetch attendances');
-    return res.status(httpStatus.OK).json({
-      data: attendances,
-      success: true,
-      message: 'Fetch attendances',
-    });
+
+    if (attendance) {
+      const populatedAttendance = await attendance.populate(['portal', 'user']);
+      logger.info('Fetch attendance');
+      return res.status(httpStatus.OK).json({
+        data: populatedAttendance,
+        success: true,
+        message: 'Fetch attendance',
+      });
+    } else {
+      new attendanceModel({
+        portal: req.portal._id,
+        user: req.params.userId,
+      })
+        .save()
+        .then(async (newAttendance) => {
+          const populatedNewAttendance = await newAttendance.populate([
+            'portal',
+            'user',
+          ]);
+          logger.info('Fetch attendance');
+          return res.status(httpStatus.OK).json({
+            data: populatedNewAttendance,
+            success: true,
+            message: 'Fetch attendance',
+          });
+        });
+    }
   } catch (error) {
     logger.error(error.message);
     return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
