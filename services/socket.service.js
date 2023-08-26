@@ -1,7 +1,7 @@
 // utils
 const logger = require('../utils/logger.js');
 
-const socketManager = (io) => {
+const socketProvider = (io) => {
   io.on('connection', (socket) => {
     logger.info(`${socket.id} connected`);
 
@@ -36,4 +36,4 @@ const socketManager = (io) => {
   });
 };
 
-module.exports = socketManager;
+module.exports = socketProvider;

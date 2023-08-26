@@ -29,7 +29,7 @@ const logger = require('./utils/logger.js');
 const morganMiddleware = require('./middlewares/morgan.middleware.js');
 
 // services
-const socketManager = require('./services/socket.service.js');
+const socketProvider = require('./services/socket.service.js');
 
 // helpers
 const GfsBucket = require('./helpers/gridfsManager.js');
@@ -95,7 +95,7 @@ const io = new Server(httpServer, {
   },
 });
 
-socketManager(io);
+socketProvider(io);
 
 mongoose.set('strictQuery', true);
 mongoose.connect(
