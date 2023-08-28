@@ -9,6 +9,7 @@ const { Server } = require('socket.io');
 // routes
 const homeRoutes = require('./routes/home.route.js');
 const authRoutes = require('./routes/auth.route.js');
+const dashboardRoutes = require('./routes/dashboard.route.js');
 const subjectRoutes = require('./routes/subject.route.js');
 const facultyRoutes = require('./routes/faculty.route.js');
 const batchRoutes = require('./routes/batch.route.js');
@@ -77,6 +78,7 @@ app.use(morganMiddleware);
 
 app.use('/', homeRoutes);
 app.use('/auth', authRoutes);
+app.use('/dashboard', dashboardRoutes);
 app.use('/subjects', subjectRoutes);
 app.use('/faculties', facultyRoutes);
 app.use('/batches', batchRoutes);
