@@ -149,9 +149,30 @@ const changeUserStatus = async (req, res) => {
   }
 };
 
+const getUsersByBatch = async (req, res) => {
+  try {
+    userModel.find({ batch: req.params.batchId }).then((users) => {
+      logger.info('Fetch users');
+      return res.status(httpStatus.OK).json({
+        data: users,
+        success: true,
+        message: 'Fetch users',
+      });
+    });
+  } catch (error) {
+    logger.error(error.message);
+    return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+      data: null,
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 module.exports = {
   getUsers,
   getUser,
   updateUser,
   changeUserStatus,
+  getUsersByBatch,
 };

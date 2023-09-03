@@ -1,21 +1,16 @@
 const mongoose = require('mongoose');
 
-const portalSchema = new mongoose.Schema(
+const attendanceSchema = new mongoose.Schema(
   {
-    subject: {
+    portal: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'subjects',
+      ref: 'portals',
       required: true,
     },
-    batch: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'batches',
-      required: true,
-    },
-    teacher: {
+    user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'users',
-      default: null,
+      required: true,
     },
     activeDates: {
       type: [
@@ -31,4 +26,4 @@ const portalSchema = new mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model('portals', portalSchema);
+module.exports = mongoose.model('attendances', attendanceSchema);

@@ -85,7 +85,7 @@ const portalValidation = async (req, res, next) => {
       })
       .then((portal) => {
         if (portal) {
-          req.portalId = portal._id;
+          req.portal = portal;
           next();
         } else {
           new portalModel({
@@ -94,7 +94,7 @@ const portalValidation = async (req, res, next) => {
           })
             .save()
             .then((newPortal) => {
-              req.portalId = newPortal._id;
+              req.portal = newPortal;
               next();
             });
         }

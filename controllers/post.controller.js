@@ -14,7 +14,7 @@ const GfsBucket = require('../helpers/gridfsManager.js');
 const createPost = async (req, res) => {
   try {
     new postModel({
-      portal: req.portalId,
+      portal: req.portal._id,
       user: req.user._id,
       category: req.body.category,
       title: req.body.title,
@@ -61,7 +61,7 @@ const getPosts = async (req, res) => {
   try {
     postModel
       .find({
-        portal: req.portalId,
+        portal: req.portal._id,
         category: {
           $in: ['material', 'assignment'],
         },
@@ -223,7 +223,7 @@ const getAllStats = async (req, res) => {
 
     const posts = await postModel
       .find({
-        portal: req.portalId,
+        portal: req.portal._id,
         category: 'assignment',
       })
       .populate(['submittedBy']);
@@ -276,6 +276,7 @@ const getAllStats = async (req, res) => {
       });
     });
 
+    logger.info('Fetch all stats');
     return res.status(httpStatus.OK).json({
       data: results,
       success: true,
@@ -330,10 +331,11 @@ const getSingleStats = async (req, res) => {
       });
     });
 
+    logger.info('Fetch userStats');
     return res.status(httpStatus.OK).json({
       data: results,
       success: true,
-      message: 'Fetch all stats',
+      message: 'Fetch userStats',
     });
   } catch (error) {
     logger.error(error.message);

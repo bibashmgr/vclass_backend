@@ -9,6 +9,7 @@ const { Server } = require('socket.io');
 // routes
 const homeRoutes = require('./routes/home.route.js');
 const authRoutes = require('./routes/auth.route.js');
+const dashboardRoutes = require('./routes/dashboard.route.js');
 const subjectRoutes = require('./routes/subject.route.js');
 const facultyRoutes = require('./routes/faculty.route.js');
 const batchRoutes = require('./routes/batch.route.js');
@@ -17,6 +18,7 @@ const portalRoutes = require('./routes/portal.route.js');
 const messageRoutes = require('./routes/message.route.js');
 const fileRoutes = require('./routes/file.route.js');
 const postRoutes = require('./routes/post.route.js');
+const attendanceRoutes = require('./routes/attendance.route.js');
 
 // config
 const config = require('./config/config.js');
@@ -28,7 +30,7 @@ const logger = require('./utils/logger.js');
 const morganMiddleware = require('./middlewares/morgan.middleware.js');
 
 // services
-const socketManager = require('./services/socket.service.js');
+const socketProvider = require('./services/socket.service.js');
 
 // helpers
 const GfsBucket = require('./helpers/gridfsManager.js');
@@ -76,6 +78,7 @@ app.use(morganMiddleware);
 
 app.use('/', homeRoutes);
 app.use('/auth', authRoutes);
+app.use('/dashboard', dashboardRoutes);
 app.use('/subjects', subjectRoutes);
 app.use('/faculties', facultyRoutes);
 app.use('/batches', batchRoutes);
@@ -84,6 +87,7 @@ app.use('/portals', portalRoutes);
 app.use('/messages', messageRoutes);
 app.use('/files', fileRoutes);
 app.use('/posts', postRoutes);
+app.use('/attendances', attendanceRoutes);
 
 const httpServer = http.createServer(app);
 
@@ -93,7 +97,7 @@ const io = new Server(httpServer, {
   },
 });
 
-socketManager(io);
+socketProvider(io);
 
 mongoose.set('strictQuery', true);
 mongoose.connect(
